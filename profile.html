@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ Sơ Của Tôi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="page-title">Hồ Sơ ✏️</div>
+            <span style="color: var(--primary); font-weight: bold;">Lưu</span>
+        </div>
+
+        <div class="profile-content">
+            <label class="label">Ảnh của bạn (Tối đa 9)</label>
+            <div class="photo-grid">
+                <div class="photo-slot main" id="slot-1" onclick="triggerUpload(1)">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <input type="file" id="fileInput-1" hidden onchange="previewImage(event, 1)">
+
+                <div class="photo-slot" id="slot-2" onclick="triggerUpload(2)"><i class="fas fa-plus"></i></div>
+                <input type="file" id="fileInput-2" hidden onchange="previewImage(event, 2)">
+                
+                <div class="photo-slot" id="slot-3" onclick="triggerUpload(3)"><i class="fas fa-plus"></i></div>
+                <input type="file" id="fileInput-3" hidden onchange="previewImage(event, 3)">
+                
+                <div class="photo-slot" id="slot-4" onclick="triggerUpload(4)"><i class="fas fa-plus"></i></div>
+                <input type="file" id="fileInput-4" hidden onchange="previewImage(event, 4)">
+                
+                <div class="photo-slot" id="slot-5" onclick="triggerUpload(5)"><i class="fas fa-plus"></i></div>
+                <input type="file" id="fileInput-5" hidden onchange="previewImage(event, 5)">
+                
+                <div class="photo-slot" id="slot-6" onclick="triggerUpload(6)"><i class="fas fa-plus"></i></div>
+                <input type="file" id="fileInput-6" hidden onchange="previewImage(event, 6)">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Giới thiệu bản thân</label>
+                <textarea class="input-box" rows="3" placeholder="Viết gì đó thú vị..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Công việc / Trường học</label>
+                <input type="text" class="input-box" placeholder="Ví dụ: Đại học RMIT...">
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label class="label">Tuổi</label>
+                    <input type="number" class="input-box" placeholder="18+">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label class="label">Chiều cao (cm)</label>
+                    <input type="number" class="input-box" placeholder="170">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Sở thích (Chọn nhiều)</label>
+                <div class="tags-container">
+                    <div class="tag" onclick="toggleTag(this)">🍜 Ăn uống</div>
+                    <div class="tag" onclick="toggleTag(this)">✈️ Du lịch</div>
+                    <div class="tag" onclick="toggleTag(this)">🎮 Game</div>
+                    <div class="tag" onclick="toggleTag(this)">⚽ Thể thao</div>
+                    <div class="tag" onclick="toggleTag(this)">🎵 Âm nhạc</div>
+                    <div class="tag" onclick="toggleTag(this)">🐶 Thú cưng</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item"><i class="fas fa-fire"></i></a>
+            <a href="random.html" class="nav-item"><i class="fas fa-bolt"></i></a>
+            <a href="chat.html" class="nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="nav-item active"><i class="fas fa-user"></i></a>
+        </nav>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
