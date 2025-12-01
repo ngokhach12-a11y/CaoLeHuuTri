@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <title>HenHo - Trang Chủ</title>
     <link rel="stylesheet" href="css/style.css">
+    
+    <script>
+        // Kiểm tra xem người dùng đã đăng ký chưa
+        const userName = localStorage.getItem('userName');
+        
+        // Nếu chưa có tên (chưa đăng ký) -> Đá ngay về trang setup.html
+        if (!userName) {
+            window.location.href = 'setup.html';
+        }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
