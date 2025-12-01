@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>HenHo - Tạo Hồ Sơ</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="app-container" style="background: linear-gradient(135deg, #fff0f3 0%, #ffe6ea 100%);">
@@ -12,10 +13,14 @@
                 <h1 style="color: var(--primary); margin-bottom: 10px;">Chào bạn mới! 👋</h1>
                 <p style="color: #888; margin-bottom: 30px;">Hãy cho mọi người biết bạn là ai nhé.</p>
 
-                <img id="setupAvatar" src="https://via.placeholder.com/150/ffdde1/ff758c?text=+" class="avatar-upload-circle" onclick="document.getElementById('avatarInput').click()">
+                <div style="position: relative; width: 120px; margin: 0 auto 20px;">
+                    <img id="setupAvatar" src="https://via.placeholder.com/150/ffdde1/ff758c?text=+" class="avatar-upload-circle" onclick="document.getElementById('avatarInput').click()">
+                    <div style="position: absolute; bottom: 5px; right: 5px; background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white;">
+                        <i class="fas fa-camera" style="font-size: 14px;"></i>
+                    </div>
+                </div>
                 <input type="file" id="avatarInput" hidden onchange="previewSetupAvatar(event)">
-                <p style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Chạm để tải ảnh đại diện</p>
-
+                
                 <div class="form-group">
                     <label class="label">Tên biệt danh</label>
                     <input type="text" id="setupName" class="input-box" placeholder="Ví dụ: Cún Con...">
@@ -27,17 +32,26 @@
                         <input type="number" id="setupAge" class="input-box" placeholder="18+">
                     </div>
                     <div style="flex: 1;">
-                        <label class="label">Giới tính</label>
-                        <select id="setupGender" class="input-box">
-                            <option value="male">Nam</option>
-                            <option value="female">Nữ</option>
-                            <option value="lgbt">LGBT</option>
+                        <label class="label">Bạn là?</label>
+                        <select id="myGender" class="input-box">
+                            <option value="male">Nam 👨</option>
+                            <option value="female">Nữ 👩</option>
+                            <option value="lgbt">LGBT 🏳️‍🌈</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="label">Sở thích của bạn (Chọn ít nhất 3)</label>
+                    <label class="label" style="color: var(--primary);">Bạn muốn tìm ai?</label>
+                    <select id="targetGender" class="input-box" style="border-color: var(--primary); background: #fff0f3;">
+                        <option value="female">Tìm Bạn Nữ Xinh Đẹp 👩</option>
+                        <option value="male">Tìm Bạn Nam Đẹp Trai 👨</option>
+                        <option value="all">Tìm Cả Hai (Ai cũng được) 🌈</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Sở thích (Chọn ít nhất 3)</label>
                     <div class="tags-container">
                         <div class="tag" onclick="toggleTag(this)">🍜 Ăn uống</div>
                         <div class="tag" onclick="toggleTag(this)">✈️ Du lịch</div>
@@ -57,32 +71,39 @@
 
     <script src="js/script.js"></script>
     <script>
-        // Script riêng cho trang setup
+        // --- LOGIC RIÊNG CỦA TRANG SETUP ---
+
+        // 1. Xem trước ảnh avatar khi chọn
         function previewSetupAvatar(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('setupAvatar').src = e.target.result;
-                    // Lưu ảnh vào localStorage để dùng cho các trang sau
+                    // Lưu ảnh luôn vào bộ nhớ
                     localStorage.setItem('userAvatar', e.target.result);
                 }
                 reader.readAsDataURL(file);
             }
         }
 
+        // 2. Xử lý khi bấm nút Hoàn Tất
         function finishSetup() {
             const name = document.getElementById('setupName').value;
             const age = document.getElementById('setupAge').value;
+            const myGender = document.getElementById('myGender').value;
+            const targetGender = document.getElementById('targetGender').value; // Lấy giá trị mong muốn tìm kiếm
             
             if(!name || !age) {
                 alert("Vui lòng nhập tên và tuổi!");
                 return;
             }
             
-            // Lưu thông tin cơ bản
+            // Lưu toàn bộ thông tin vào LocalStorage
             localStorage.setItem('userName', name);
             localStorage.setItem('userAge', age);
+            localStorage.setItem('myGender', myGender);
+            localStorage.setItem('targetGender', targetGender); // Lưu lại để sau này lọc
             
             // Chuyển sang trang chính
             window.location.href = 'index.html';
