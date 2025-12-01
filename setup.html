@@ -49,7 +49,16 @@
                         <option value="all">Tìm Cả Hai (Ai cũng được) 🌈</option>
                     </select>
                 </div>
-
+<div class="form-group">
+    <label class="label">Vị trí hiện tại</label>
+    <div class="location-group">
+        <input type="text" id="setupLocation" class="input-box" placeholder="Nhập TP hoặc bấm nút bên cạnh..." readonly>
+        <button class="btn-locate" onclick="getMyLocation()" title="Lấy vị trí GPS">
+            <i class="fas fa-map-marker-alt"></i>
+        </button>
+    </div>
+    <p id="locationStatus" style="font-size: 12px; color: #888; margin-top: 5px;">Bấm icon bản đồ để tự động điền.</p>
+</div>
                 <div class="form-group">
                     <label class="label">Sở thích (Chọn ít nhất 3)</label>
                     <div class="tags-container">
