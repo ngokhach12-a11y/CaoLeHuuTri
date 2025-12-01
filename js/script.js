@@ -131,3 +131,8 @@ function getMyLocation() {
     const location = document.getElementById('setupLocation').value;
     localStorage.setItem('userLocation', location);
 */
+// Load vị trí
+const userLoc = localStorage.getItem('userLocation');
+if(document.getElementById('locText') && userLoc) {
+    document.getElementById('locText').innerText = userLoc;
+}
