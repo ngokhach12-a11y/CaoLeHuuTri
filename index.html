@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HenHo - Trang Chủ</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -11,22 +10,25 @@
     <div class="app-container">
         <div class="header">
             <div class="page-title">Khám Phá 🔥</div>
-            <i class="fas fa-sliders-h" style="color: #ccc;"></i>
+            <i class="fas fa-filter" style="font-size: 20px; color: #ccc; cursor: pointer;"></i>
         </div>
 
-        <div class="card-stack">
-            <div class="card-placeholder">
-                <i class="fas fa-image" style="font-size: 50px; margin-bottom: 10px;"></i>
-                <p>Ảnh User (Trống)</p>
-                <div class="card-info">
-                    <h2>Tên Người Dùng, 20</h2>
-                    <p>Mô tả ngắn về bản thân...</p>
+        <div class="main-content">
+            <div class="card-stack">
+                <div class="card-placeholder">
+                    <i class="fas fa-user-circle" style="font-size: 80px; color: #ffeaa7; margin-bottom: 20px;"></i>
+                    <p style="color: #aaa;">(Chưa có ảnh)</p>
+                    
+                    <div class="card-info">
+                        <h2>Người lạ ơi <span style="font-size: 20px; font-weight: normal;">22</span></h2>
+                        <p>Đang tìm kiếm một mối quan hệ nghiêm túc...</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="action-buttons">
-                <button class="btn-circle btn-nope" onclick="swipe('nope')"><i class="fas fa-times"></i></button>
-                <button class="btn-circle btn-like" onclick="swipe('like')"><i class="fas fa-heart"></i></button>
+                <div class="action-buttons">
+                    <button class="btn-circle btn-nope" onclick="swipe('nope')"><i class="fas fa-times"></i></button>
+                    <button class="btn-circle btn-like" onclick="swipe('like')"><i class="fas fa-heart"></i></button>
+                </div>
             </div>
         </div>
 
@@ -37,7 +39,6 @@
             <a href="profile.html" class="nav-item"><i class="fas fa-user"></i></a>
         </nav>
     </div>
-
     <script src="js/script.js"></script>
 </body>
 </html>
