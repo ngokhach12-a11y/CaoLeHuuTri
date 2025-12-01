@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinder Clone - Tìm người ấy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- CSS SETUP --- */
+        :root {
+            --primary-grad: linear-gradient(45deg, #fd267a, #ff6036);
+            --bg-color: #f3f3f3;
+            --white: #ffffff;
+            --gray: #e0e0e0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Ngăn cuộn trang */
+        }
+
+        /* Khung điện thoại */
+        .app-container {
+            width: 375px;
+            height: 667px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- MÀN HÌNH 1: NHẬP THÔNG TIN (SETUP) --- */
+        .setup-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--white);
+            z-index: 100;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.5s ease;
+        }
+
+        .logo {
+            font-size: 40px;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .input-group { width: 100%; margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #555; font-weight: 600; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 12px;
+            border: 2px solid var(--gray);
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-group input:focus { border-color: #fd267a; }
+
+        .avatar-preview {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: #eee;
+            margin-bottom: 20px;
+            object-fit: cover;
+            border: 3px solid #fd267a;
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-grad);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* --- MÀN HÌNH 2: ỨNG DỤNG CHÍNH (APP) --- */
+        .app-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            opacity: 0; /* Ẩn mặc định */
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        /* Header nhỏ của App */
+        .app-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        .user-mini-profile { display: flex; align-items: center; gap: 10px; }
+        .user-mini-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+        .user-mini-name { font-weight: bold; font-size: 14px; }
+
+        /* Khu vực thẻ bài (Card Stack) */
+        .card-container {
+            flex: 1;
+            position: relative;
+            padding: 15px;
+            perspective: 1000px;
+        }
+
+        .card {
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .card-content {
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+        }
+        .card h2 { font-size: 28px; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card p { font-size: 16px; opacity: 0.9; }
+
+        /* Nút điều khiển */
+        .controls {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding-bottom: 30px;
+        }
+
+        .btn-control {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-control:active { transform: scale(0.9); }
+        .btn-nope { color: #ec5e6f; border: 1px solid #ec5e6f; }
+        .btn-like { color: #4cca93; border: 1px solid #4cca93; }
+
+        /* Hiệu ứng Animation */
+        .swipe-left { transform: translateX(-200%) rotate(-30deg) !important; opacity: 0; }
+        .swipe-right { transform: translateX(200%) rotate(30deg) !important; opacity: 0; }
+
+        /* Màn hình kết thúc */
+        .end-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 50;
+            display: none; /* Ẩn mặc định */
+        }
+        
+        /* Hiệu ứng Match */
+        .match-popup {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            display: none; /* Ẩn */
+        }
+        .match-text {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 60px;
+            color: #4cca93;
+            transform: rotate(-10deg);
+            border: 4px solid #4cca93;
+            padding: 10px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="setup-screen" id="setupScreen">
+            <div class="logo">tinder🔥</div>
+            <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/100" alt="Avatar">
+            
+            <div class="input-group">
+                <label>Tải ảnh của bạn</label>
+                <input type="file" id="avatarInput" accept="image/*">
+            </div>
+            
+            <div class="input-group">
+                <label>Tên của bạn</label>
+                <input type="text" id="userName" placeholder="Nhập tên...">
+            </div>
+
+            <div class="input-group">
+                <label>Tuổi</label>
+                <input type="number" id="userAge" placeholder="18+">
+            </div>
+
+            <button class="btn-start" onclick="startApp()">Bắt đầu lướt</button>
+        </div>
+
+        <div class="app-screen" id="appScreen">
+            <div class="app-header">
+                <div class="user-mini-profile">
+                    <img id="miniAvatar" class="user-mini-avatar" src="">
+                    <span id="miniName" class="user-mini-name">User</span>
+                </div>
+                <div class="logo" style="font-size: 24px; margin: 0;">🔥</div>
+            </div>
+
+            <div class="card-container" id="cardStack">
+                </div>
+
+            <div class="controls">
+                <button class="btn-control btn-nope" onclick="swipe('left')"><i class="fas fa-times"></i></button>
+                <button class="btn-control btn-like" onclick="swipe('right')"><i class="fas fa-heart"></i></button>
+            </div>
+        </div>
+
+        <div class="end-screen" id="endScreen">
+            <div class="placeholder-icon" style="font-size: 60px; margin-bottom: 20px;">😴</div>
+            <h2>Hết người rồi!</h2>
+            <p>Bạn đã quẹt hết mọi người quanh đây.</p>
+            <p style="color: #888; margin-top: 10px;">Hãy quay lại sau nhé.</p>
+            <button class="btn-start" onclick="location.reload()" style="width: 200px; margin-top: 30px;">Chơi lại</button>
+        </div>
+
+        <div class="match-popup" id="matchPopup">
+            <div class="match-text">It's a Match!</div>
+            <p>Bạn và người ấy thích nhau 😍</p>
+            <button class="btn-start" style="width: 200px; margin-top: 30px; background: transparent; border: 2px solid white;" onclick="closeMatch()">Tiếp tục quẹt</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DỮ LIỆU GIẢ LẬP (10 NGƯỜI) ---
+        // Sử dụng ảnh từ Unsplash Source
+        const profiles = [
+            { name: "Lan Anh", age: 22, bio: "Yêu mèo và thích đi du lịch 🐱", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80" },
+            { name: "Minh Tuấn", age: 25, bio: "Coder ban ngày, Gamer ban đêm 🎮", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80" },
+            { name: "Thảo Vy", age: 20, bio: "Sinh viên năm 2 kinh tế 📚", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" },
+            { name: "Hoàng Nam", age: 27, bio: "Thích gym và cafe ☕", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" },
+            { name: "Ngọc Trinh", age: 24, bio: "Tìm người chụp ảnh có tâm 📸", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" },
+            { name: "Đức Thịnh", age: 26, bio: "Khởi nghiệp, yêu tự do 🚀", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" },
+            { name: "Hương Giang", age: 23, bio: "Food reviewer nghiệp dư 🍜", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" },
+            { name: "Thanh Tùng", age: 28, bio: "Thích đá bóng và guitar 🎸", img: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=400&q=80" },
+            { name: "Mai Phương", age: 21, bio: "Hướng nội part-time ✨", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" },
+            { name: "Quốc Anh", age: 29, bio: "Kỹ sư xây dựng, tìm người nghiêm túc 🏠", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80" }
+        ];
+
+        let currentProfileIndex = 0;
+        let userAvatarURL = "";
+
+        // --- XỬ LÝ NHẬP LIỆU & BẮT ĐẦU ---
+        const avatarInput = document.getElementById('avatarInput');
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                userAvatarURL = URL.createObjectURL(file);
+                document.getElementById('avatarPreview').src = userAvatarURL;
+            }
+        });
+
+        function startApp() {
+            const name = document.getElementById('userName').value;
+            const age = document.getElementById('userAge').value;
+
+            if (!name || !age) {
+                alert("Vui lòng nhập tên và tuổi!");
+                return;
+            }
+
+            // Cập nhật thông tin lên Header
+            document.getElementById('miniName').innerText = `${name}, ${age}`;
+            document.getElementById('miniAvatar').src = userAvatarURL || "https://via.placeholder.com/100";
+
+            // Chuyển màn hình
+            document.getElementById('setupScreen').style.transform = "translateY(-100%)";
+            
+            const appScreen = document.getElementById('appScreen');
+            appScreen.style.opacity = "1";
+            appScreen.style.pointerEvents = "all";
+
+            renderCards();
+        }
+
+        // --- RENDER THẺ BÀI ---
+        const cardStack = document.getElementById('cardStack');
+
+        function renderCards() {
+            cardStack.innerHTML = "";
+            // Render ngược (người cuối mảng nằm dưới cùng)
+            // Chúng ta chỉ render 2 người đầu tiên để tối ưu hiệu năng: người hiện tại và người kế tiếp
+            // Nhưng để đơn giản cho demo này, mình sẽ render tất cả nhưng ẩn đi, hoặc chỉ render người hiện tại.
+            
+            // Logic tốt nhất cho Stack: Render từ cuối lên đầu
+            [...profiles].reverse().forEach((profile, index) => {
+                // index đảo ngược
+                const realIndex = profiles.length - 1 - index;
+                if (realIndex < currentProfileIndex) return; // Đã quẹt qua rồi
+
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.style.backgroundImage = `url(${profile.img})`;
+                card.style.zIndex = 100 - realIndex; // Người đầu tiên z-index cao nhất
+                
+                // Hiệu ứng xếp chồng nhẹ
+                if (realIndex > currentProfileIndex) {
+                    card.style.transform = `scale(${1 - (realIndex - currentProfileIndex) * 0.05}) translateY(${(realIndex - currentProfileIndex) * 10}px)`;
+                }
+
+                card.id = `card-${realIndex}`;
+
+                const content = `
+                    <div class="card-content">
+                        <h2>${profile.name}, ${profile.age}</h2>
+                        <p>${profile.bio}</p>
+                    </div>
+                `;
+                card.innerHTML = content;
+                cardStack.appendChild(card);
+            });
+        }
+
+        // --- XỬ LÝ QUẸT (SWIPE) ---
+        function swipe(direction) {
+            if (currentProfileIndex >= profiles.length) return;
+
+            const currentCard = document.getElementById(`card-${currentProfileIndex}`);
+            
+            if (direction === 'left') {
+                currentCard.classList.add('swipe-left');
+            } else {
+                currentCard.classList.add('swipe-right');
+                
+                // Giả lập tỷ lệ Match ngẫu nhiên (30%)
+                if (Math.random() > 0.7) {
+                    setTimeout(() => {
+                        document.getElementById('matchPopup').style.display = "flex";
+                    }, 500);
+                }
+            }
+
+            // Đợi animation xong thì xóa card và cập nhật card sau
+            setTimeout(() => {
+                currentCard.remove();
+                currentProfileIndex++;
+                updateStackView(); // Cập nhật lại vị trí các card phía sau
+                
+                // Kiểm tra hết người
+                if (currentProfileIndex >= profiles.length) {
+                    document.getElementById('endScreen').style.display = "flex";
+                }
+            }, 300);
+        }
+
+        function updateStackView() {
+            // Lấy các card còn lại và đẩy chúng lên trên
+            const remainingCards = document.querySelectorAll('.card');
+            remainingCards.forEach((card, i) => {
+                // i=0 là card kế tiếp (sắp được quẹt)
+                // Reset transform về scale 1
+                const scale = 1 - (i * 0.05);
+                const translateY = i * 10;
+                card.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+            });
+        }
+
+        function closeMatch() {
+            document.getElementById('matchPopup').style.display = "none";
+        }
+
+        // Hỗ trợ phím mũi tên
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('setupScreen').style.transform) { // Chỉ khi đã vào app
+                if (e.key === 'ArrowLeft') swipe('left');
+                if (e.key === 'ArrowRight') swipe('right');
+            }
+        });
+
+    </script>
+</body>
+</html>
