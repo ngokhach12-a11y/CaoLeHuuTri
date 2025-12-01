@@ -161,3 +161,37 @@ body {
     animation: spinInfinite 1s linear infinite;
 }
 @keyframes spinInfinite { 100% { transform: rotate(360deg); } }
+/* --- THÊM CSS CHO NÚT ĐỊNH VỊ --- */
+.location-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-locate {
+    width: 50px;
+    height: 50px; /* Bằng chiều cao input */
+    border-radius: 12px;
+    border: none;
+    background: #fff0f3;
+    color: var(--primary);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--primary);
+    transition: 0.3s;
+}
+
+.btn-locate:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-locate.loading {
+    animation: pulse 1s infinite;
+    background: #ccc;
+    border-color: #ccc;
+    color: white;
+}
