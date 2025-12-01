@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HenHo Pinky - Tìm người yêu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- CẤU HÌNH GIAO DIỆN HỒNG --- */
+        :root {
+            /* Gradient màu hồng phấn */
+            --primary-grad: linear-gradient(45deg, #ff9a9e, #fecfef, #feada6);
+            --btn-grad: linear-gradient(45deg, #ff758c, #ff7eb3);
+            --bg-color: #ffe6ea; /* Nền hồng nhạt */
+            --white: #ffffff;
+            --heart-color: #ff4d6d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- HIỆU ỨNG TRÁI TIM BAY NỀN --- */
+        .bg-hearts {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 117, 140, 0.4);
+            animation: floatUp 10s linear infinite;
+            bottom: -50px;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- KHUNG ĐIỆN THOẠI --- */
+        .app-container {
+            width: 375px;
+            height: 667px;
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(255, 117, 140, 0.3); /* Bóng hồng */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            z-index: 10; /* Nằm trên trái tim nền */
+            border: 4px solid #fff0f3;
+        }
+
+        /* --- MÀN HÌNH SETUP --- */
+        .setup-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--white);
+            z-index: 100;
+            padding: 30px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: transform 0.5s ease;
+        }
+
+        .logo {
+            font-size: 35px;
+            background: var(--btn-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 20px;
+            font-family: 'Comic Sans MS', cursive; /* Font cute */
+        }
+
+        .avatar-preview {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            background: #fff0f3;
+            margin-bottom: 20px;
+            object-fit: cover;
+            border: 3px solid #ff7eb3; /* Viền hồng */
+            padding: 3px;
+        }
+
+        .input-group { width: 100%; margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #ff758c; font-weight: 600; }
+        .input-group input {
+            width: 100%; padding: 12px;
+            border: 2px solid #ffdde1;
+            border-radius: 15px;
+            font-size: 16px; outline: none;
+            color: #555;
+        }
+        .input-group input:focus { border-color: #ff758c; }
+
+        .btn-start {
+            width: 100%; padding: 15px;
+            background: var(--btn-grad);
+            color: white; border: none;
+            border-radius: 30px;
+            font-size: 18px; font-weight: bold;
+            cursor: pointer; margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+            transition: transform 0.2s;
+        }
+        .btn-start:hover { transform: scale(1.02); }
+
+        /* --- MÀN HÌNH CHÍNH (APP) --- */
+        .app-screen {
+            flex: 1; display: flex; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s;
+        }
+
+        .app-header {
+            padding: 15px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #fff0f3;
+        }
+        .user-mini-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff7eb3; }
+        .user-mini-name { font-weight: bold; color: #ff758c; margin-left: 10px; }
+
+        .card-container { flex: 1; position: relative; padding: 15px; perspective: 1000px; }
+
+        .card {
+            position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px;
+            background: #000; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .card-content {
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(255, 117, 140, 0.9)); /* Gradient hồng */
+            color: white;
+        }
+        .card h2 { font-size: 26px; margin-bottom: 5px; }
+
+        /* Nút điều khiển */
+        .controls { padding: 20px; display: flex; justify-content: center; gap: 40px; padding-bottom: 30px; }
+        .btn-control {
+            width: 65px; height: 65px; border-radius: 50%; border: none;
+            background: white; font-size: 28px; cursor: pointer;
+            transition: transform 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .btn-nope { color: #888; border: 2px solid #eee; }
+        .btn-like { 
+            color: white; 
+            background: var(--btn-grad); 
+            border: none;
+            box-shadow: 0 5px 20px rgba(255, 117, 140, 0.5);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .swipe-left { transform: translateX(-200%) rotate(-30deg) !important; opacity: 0; }
+        .swipe-right { transform: translateX(200%) rotate(30deg) !important; opacity: 0; }
+
+        /* Popup Match */
+        .match-popup {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 200; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            color: #ff758c; display: none;
+            animation: popIn 0.5s ease;
+        }
+        .match-icon { font-size: 80px; color: #ff4d6d; animation: heartbeat 1s infinite; margin-bottom: 20px; }
+        @keyframes heartbeat { 0% {transform: scale(1);} 20% {transform: scale(1.2);} 40% {transform: scale(1);} 100% {transform: scale(1);} }
+        @keyframes popIn { from {transform: scale(0.5); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="bgHearts">
+        </div>
+
+    <div class="app-container">
+        
+        <div class="setup-screen" id="setupScreen">
+            <div class="logo">LovePink 💖</div>
+            <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/100/ffdde1/ff758c?text=+" alt="Avatar">
+            
+            <div class="input-group">
+                <label>Ảnh đại diện cute của bạn</label>
+                <input type="file" id="avatarInput" accept="image/*">
+            </div>
+            
+            <div class="input-group">
+                <label>Biệt danh</label>
+                <input type="text" id="userName" placeholder="Ví dụ: Bé Mèo...">
+            </div>
+
+            <div class="input-group">
+                <label>Tuổi</label>
+                <input type="number" id="userAge" placeholder="18+">
+            </div>
+
+            <button class="btn-start" onclick="startApp()">Đi tìm tình yêu 💕</button>
+        </div>
+
+        <div class="app-screen" id="appScreen">
+            <div class="app-header">
+                <div style="display:flex; align-items:center;">
+                    <img id="miniAvatar" class="user-mini-avatar" src="">
+                    <span id="miniName" class="user-mini-name">User</span>
+                </div>
+                <i class="fas fa-heart" style="color: #ff7eb3; font-size: 24px;"></i>
+            </div>
+
+            <div class="card-container" id="cardStack">
+                </div>
+
+            <div class="controls">
+                <button class="btn-control btn-nope" onclick="swipe('left')"><i class="fas fa-times"></i></button>
+                <button class="btn-control btn-like" onclick="swipe('right')"><i class="fas fa-heart"></i></button>
+            </div>
+        </div>
+
+        <div class="match-popup" id="matchPopup">
+            <i class="fas fa-heart match-icon"></i>
+            <h1 style="font-family: 'Comic Sans MS'; color: #ff4d6d;">Tương hợp!</h1>
+            <p style="color: #555; margin-bottom: 30px;">Hai bạn rất đẹp đôi đó nha 😍</p>
+            <button class="btn-start" style="width: 200px;" onclick="closeMatch()">Lướt tiếp</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. TẠO TRÁI TIM BAY NỀN ---
+        function createHearts() {
+            const container = document.getElementById('bgHearts');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('i');
+                heart.classList.add('fas', 'fa-heart', 'bg-heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // --- 2. DỮ LIỆU ---
+        const profiles = [
+            { name: "Minh Anh", age: 20, bio: "Thích màu hồng và ghét sự giả dối 🎀", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80" },
+            { name: "Hoàng Tử", age: 22, bio: "Tìm công chúa của đời mình 👑", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80" },
+            { name: "Bé Heo", age: 19, bio: "Thích trà sữa full topping 🧋", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" },
+            { name: "Cool Boy", age: 24, bio: "Yêu nhạc rap và trượt ván 🛹", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" },
+            { name: "Thư Thư", age: 21, bio: "Chụp ảnh film và nghe nhạc Lofi 📸", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" },
+            { name: "Quang Đạt", age: 25, bio: "Kỹ sư IT tìm bạn gái biết nấu ăn 💻", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" },
+            { name: "Tiểu Vy", age: 23, bio: "Yêu mèo hơn yêu người yêu 🐱", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" },
+            { name: "Đức Phúc", age: 26, bio: "Thích hát và đi phượt 🎤", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80" },
+            { name: "Ngọc Lan", age: 22, bio: "Thích đi dạo phố mùa thu 🍂", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" },
+            { name: "Thanh Tùng", age: 27, bio: "Thích đá bóng ⚽", img: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=400&q=80" }
+        ];
+
+        let currentProfileIndex = 0;
+        let userAvatarURL = "";
+
+        // --- 3. XỬ LÝ ẢNH ---
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                userAvatarURL = URL.createObjectURL(file);
+                document.getElementById('avatarPreview').src = userAvatarURL;
+            }
+        });
+
+        // --- 4. BẮT ĐẦU ---
+        function startApp() {
+            const name = document.getElementById('userName').value;
+            const age = document.getElementById('userAge').value;
+            if (!name || !age) { alert("Bạn chưa nhập tên hoặc tuổi kìa!"); return; }
+
+            document.getElementById('miniName').innerText = `${name}, ${age}`;
+            document.getElementById('miniAvatar').src = userAvatarURL || "https://via.placeholder.com/100/ffdde1/ff758c?text=U";
+            
+            document.getElementById('setupScreen').style.transform = "translateY(-100%)";
+            const appScreen = document.getElementById('appScreen');
+            appScreen.style.opacity = "1";
+            appScreen.style.pointerEvents = "all";
+            renderCards();
+        }
+
+        // --- 5. RENDER THẺ ---
+        function renderCards() {
+            const cardStack = document.getElementById('cardStack');
+            cardStack.innerHTML = "";
+            [...profiles].reverse().forEach((profile, index) => {
+                const realIndex = profiles.length - 1 - index;
+                if (realIndex < currentProfileIndex) return;
+
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.style.backgroundImage = `url(${profile.img})`;
+                card.style.zIndex = 100 - realIndex;
+                card.id = `card-${realIndex}`;
+                
+                if (realIndex > currentProfileIndex) {
+                    card.style.transform = `scale(${1 - (realIndex - currentProfileIndex) * 0.05}) translateY(${(realIndex - currentProfileIndex) * 10}px)`;
+                }
+
+                card.innerHTML = `
+                    <div class="card-content">
+                        <h2>${profile.name}, ${profile.age} <i class="fas fa-check-circle" style="font-size:16px; color:#4cca93;"></i></h2>
+                        <p>${profile.bio}</p>
+                    </div>
+                `;
+                cardStack.appendChild(card);
+            });
+        }
+
+        // --- 6. SWIPE ---
+        function swipe(direction) {
+            if (currentProfileIndex >= profiles.length) { alert("Hết người rồi huhu!"); return; }
+            const currentCard = document.getElementById(`card-${currentProfileIndex}`);
+            
+            if (direction === 'left') currentCard.classList.add('swipe-left');
+            else {
+                currentCard.classList.add('swipe-right');
+                // Tỷ lệ Match cao hơn (50%)
+                if (Math.random() > 0.5) setTimeout(() => document.getElementById('matchPopup').style.display = "flex", 500);
+            }
+
+            setTimeout(() => {
+                currentCard.remove();
+                currentProfileIndex++;
+                updateStackView();
+            }, 300);
+        }
+
+        function updateStackView() {
+            document.querySelectorAll('.card').forEach((card, i) => {
+                card.style.transform = `scale(${1 - (i * 0.05)}) translateY(${i * 10}px)`;
+            });
+        }
+
+        function closeMatch() {
+            document.getElementById('matchPopup').style.display = "none";
+        }
+    </script>
+</body>
+</html>
