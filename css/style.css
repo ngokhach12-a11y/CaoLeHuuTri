@@ -1,141 +1,163 @@
-/* --- CẤU HÌNH GIAO DIỆN TRẮNG HỒNG --- */
+/* --- GIAO DIỆN FULL MÀN HÌNH TRẮNG HỒNG --- */
 :root {
-    --primary: #ff6b81;       /* Hồng đậm chủ đạo */
-    --primary-light: #ffeef2; /* Hồng phấn nền */
-    --gradient: linear-gradient(135deg, #ff9a9e 0%, #ff6b81 100%);
+    --primary: #ff6b81;       
+    --primary-bg: #fff0f3;    
     --white: #ffffff;
     --text-dark: #2d3436;
     --text-gray: #a4b0be;
-    --shadow: 0 10px 30px rgba(255, 107, 129, 0.15);
-    --radius: 25px;
+    --shadow: 0 4px 15px rgba(255, 107, 129, 0.2);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
 body {
-    background-color: var(--primary-light);
-    display: flex; justify-content: center; align-items: center;
-    min-height: 100vh;
+    background-color: var(--primary-bg);
+    overflow: hidden; /* Không cho cuộn trang chính */
 }
 
-/* KHUNG ĐIỆN THOẠI CHUNG */
+/* KHUNG CHÍNH - FULL MÀN HÌNH */
 .app-container {
-    width: 375px; height: 750px;
+    width: 100vw; 
+    height: 100vh;
     background: var(--white);
-    border-radius: 35px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-    position: relative; overflow: hidden;
-    display: flex; flex-direction: column;
-    border: 8px solid #fff;
+    display: flex; 
+    flex-direction: column;
+    position: relative;
 }
 
-/* --- HEADER & NAV --- */
+/* --- HEADER --- */
 .header {
-    padding: 20px; display: flex; justify-content: space-between; align-items: center;
-    background: #fff; z-index: 10;
+    height: 60px;
+    padding: 0 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    z-index: 10;
 }
-.page-title { font-size: 22px; font-weight: 800; color: var(--primary); }
+.page-title { font-size: 24px; font-weight: 800; color: var(--primary); }
 
-.bottom-nav {
-    height: 70px; background: #fff; border-top: 1px solid #eee;
-    display: flex; justify-content: space-around; align-items: center;
-    position: absolute; bottom: 0; width: 100%; z-index: 50;
+/* --- NỘI DUNG CHÍNH (Căn giữa cho đẹp mắt) --- */
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+    background: #fafafa;
 }
-.nav-item { font-size: 24px; color: #ddd; text-decoration: none; transition: 0.3s; }
-.nav-item:hover, .nav-item.active { color: var(--primary); transform: scale(1.1); }
+
+/* --- TRANG SETUP (MỚI) --- */
+.setup-box {
+    width: 100%;
+    max-width: 500px; /* Giới hạn chiều rộng form cho đẹp */
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    overflow-y: auto;
+    max-height: 90vh;
+}
 
 /* --- TRANG QUẸT (INDEX) --- */
 .card-stack {
-    flex: 1; position: relative; padding: 15px; perspective: 1000px;
-    display: flex; justify-content: center;
-    background: linear-gradient(to bottom, #fff, #fff0f3);
+    width: 100%;
+    max-width: 450px; /* Thẻ bài không quá to */
+    height: 80%;
+    position: relative;
+    perspective: 1000px;
 }
-/* Khung ảnh trống để bạn tự ghép */
+
 .card-placeholder {
-    width: 100%; height: 85%;
-    background-color: #f8f9fa;
-    border: 2px dashed #ffcba4;
+    width: 100%; height: 100%;
+    background-color: #fff;
+    border: 3px dashed #ffcba4;
     border-radius: 20px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    color: #ffcba4; font-weight: bold;
-    position: absolute; top: 10px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    color: #ffcba4; font-weight: bold; font-size: 1.2rem;
+    position: absolute; top: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    background-size: cover; background-position: center;
 }
-.card-info {
-    position: absolute; bottom: 0; width: 100%;
-    padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.5));
-    color: white; border-radius: 0 0 20px 20px;
-}
+
 .action-buttons {
-    position: absolute; bottom: 90px; width: 100%;
-    display: flex; justify-content: center; gap: 30px;
+    position: absolute; bottom: 30px; width: 100%;
+    display: flex; justify-content: center; gap: 40px; z-index: 5;
 }
 .btn-circle {
-    width: 60px; height: 60px; border-radius: 50%;
+    width: 70px; height: 70px; border-radius: 50%;
     border: none; background: white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    font-size: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
 }
+.btn-circle:hover { transform: scale(1.1); }
 .btn-nope { color: #ff4757; }
 .btn-like { color: #2ed573; }
 
-/* --- TRANG PROFILE --- */
-.profile-content {
-    flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 80px;
+/* --- NAV BAR (Full width dưới cùng) --- */
+.bottom-nav {
+    height: 70px; background: #fff; border-top: 1px solid #eee;
+    display: flex; justify-content: center; gap: 80px; align-items: center;
+    width: 100%; z-index: 50;
 }
-/* Lưới 9 ảnh */
-.photo-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
-}
-.photo-slot {
-    aspect-ratio: 1/1; background: #f1f2f6; border-radius: 10px;
-    border: 2px dashed #ddd; cursor: pointer; position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: center; color: #ccc;
-}
-.photo-slot img { width: 100%; height: 100%; object-fit: cover; }
-.photo-slot.main {
-    grid-column: span 2; grid-row: span 2; /* Ảnh chính to hơn */
-    border-color: var(--primary); background: #fff0f3;
-}
+.nav-item { font-size: 28px; color: #ddd; text-decoration: none; transition: 0.3s; }
+.nav-item:hover, .nav-item.active { color: var(--primary); transform: scale(1.1); }
 
-/* Form thông tin */
-.form-group { margin-bottom: 15px; }
-.label { font-size: 14px; color: var(--text-gray); font-weight: 600; margin-bottom: 5px; display: block; }
-.input-box {
-    width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 15px;
-    font-size: 15px; background: #fff; color: var(--text-dark);
+/* --- FORM STYLES --- */
+.avatar-upload-circle {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: #f1f2f6; margin: 0 auto 20px;
+    border: 4px solid var(--primary); cursor: pointer;
+    object-fit: cover;
 }
-.input-box:focus { border-color: var(--primary); outline: none; }
-.tags-container { display: flex; flex-wrap: wrap; gap: 8px; }
+.form-group { margin-bottom: 20px; text-align: left; }
+.label { font-weight: 600; color: var(--text-dark); margin-bottom: 8px; display: block; }
+.input-box {
+    width: 100%; padding: 15px; border: 1px solid #eee; border-radius: 12px;
+    font-size: 16px; outline: none; background: #f9f9f9;
+}
+.input-box:focus { border-color: var(--primary); background: #fff; }
+
+.btn-primary {
+    width: 100%; padding: 15px; border-radius: 30px; border: none;
+    background: linear-gradient(135deg, #ff9a9e 0%, #ff6b81 100%);
+    color: white; font-size: 18px; font-weight: bold; cursor: pointer;
+    margin-top: 20px; box-shadow: var(--shadow);
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+/* TAGS SỞ THÍCH */
+.tags-container { display: flex; flex-wrap: wrap; gap: 10px; }
 .tag {
-    padding: 8px 15px; background: #fff; border: 1px solid #eee;
-    border-radius: 20px; font-size: 13px; cursor: pointer;
+    padding: 10px 20px; background: #fff; border: 1px solid #ddd;
+    border-radius: 25px; font-size: 14px; cursor: pointer; user-select: none;
 }
 .tag.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-/* --- TRANG RANDOM (XOAY HOÀI) --- */
-.radar-container {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    background: #fff;
+/* --- PROFILE GRID 9 ẢNH --- */
+.profile-wrapper { width: 100%; max-width: 800px; padding: 20px; } /* Rộng hơn cho Desktop */
+.photo-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;
 }
-.radar-ring {
-    width: 150px; height: 150px; border-radius: 50%;
-    border: 4px solid var(--primary);
-    border-top-color: transparent;
-    animation: spinInfinite 1s linear infinite; /* Xoay mãi mãi */
-    margin-bottom: 30px;
+.photo-slot {
+    aspect-ratio: 1/1; background: #f1f2f6; border-radius: 15px;
+    border: 2px dashed #ccc; cursor: pointer; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 24px;
 }
-@keyframes spinInfinite {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+.photo-slot.main {
+    grid-column: span 2; grid-row: span 2; 
+    border-color: var(--primary); background: #fff0f3;
 }
-.radar-text { color: var(--text-gray); font-size: 16px; animation: pulse 1s infinite; }
 
-/* --- TRANG CHAT (TRỐNG) --- */
-.empty-state {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center;
-    color: var(--text-gray);
+/* --- RADAR XOAY --- */
+.radar-ring {
+    width: 300px; height: 300px; /* To hơn */
+    border-radius: 50%;
+    border: 6px solid var(--primary);
+    border-top-color: transparent;
+    animation: spinInfinite 1s linear infinite;
 }
-.empty-icon { font-size: 60px; color: #ffd1d8; margin-bottom: 20px; }
+@keyframes spinInfinite { 100% { transform: rotate(360deg); } }
