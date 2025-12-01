@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tin Nhắn</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="page-title">Trò Chuyện 💬</div>
+        </div>
+
+        <div class="empty-state">
+            <i class="fas fa-heart-broken empty-icon"></i>
+            <h3 style="color: #555; margin-bottom: 10px;">Chưa có ai Match cả!</h3>
+            <p>Hãy chăm chỉ quẹt phải để tìm người ấy nhé.</p>
+            <button onclick="window.location.href='index.html'" 
+                    style="margin-top: 20px; padding: 10px 20px; border-radius: 20px; border: none; background: var(--primary); color: white; cursor: pointer;">
+                Đi quẹt ngay
+            </button>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item"><i class="fas fa-fire"></i></a>
+            <a href="random.html" class="nav-item"><i class="fas fa-bolt"></i></a>
+            <a href="chat.html" class="nav-item active"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i></a>
+        </nav>
+    </div>
+</body>
+</html>
