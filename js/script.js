@@ -70,3 +70,64 @@ document.addEventListener('DOMContentLoaded', () => {
         slot1.style.border = "none";
     }
 });
+// --- CHỨC NĂNG LẤY VỊ TRÍ GPS (MỚI) ---
+
+function getMyLocation() {
+    const statusText = document.getElementById('locationStatus');
+    const locationInput = document.getElementById('setupLocation');
+    const btn = document.querySelector('.btn-locate');
+
+    // Kiểm tra trình duyệt có hỗ trợ không
+    if (!navigator.geolocation) {
+        statusText.innerText = "Trình duyệt không hỗ trợ định vị.";
+        return;
+    }
+
+    statusText.innerText = "Đang tìm vị trí...";
+    btn.classList.add('loading'); // Hiệu ứng đang tải
+
+    // Gọi hàm lấy tọa độ
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // Gọi API miễn phí để đổi tọa độ sang tên Thành Phố
+            // Sử dụng Nominatim OpenStreetMap (Miễn phí, không cần Key)
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Lấy tên thành phố hoặc quận huyện
+                    const city = data.address.city || data.address.state || data.address.town || "Không xác định";
+                    const district = data.address.suburb || data.address.quarter || "";
+                    
+                    const fullAddress = district ? `${district}, ${city}` : city;
+                    
+                    // Điền vào ô input
+                    locationInput.value = fullAddress;
+                    localStorage.setItem('userLocation', fullAddress); // Lưu lại
+                    
+                    statusText.innerText = "Đã tìm thấy: " + fullAddress;
+                    statusText.style.color = "green";
+                    btn.classList.remove('loading');
+                })
+                .catch(() => {
+                    locationInput.value = `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+                    statusText.innerText = "Không lấy được tên phố, đã lưu tọa độ.";
+                    btn.classList.remove('loading');
+                });
+        },
+        (error) => {
+            statusText.innerText = "Lỗi: Bạn đã chặn quyền truy cập vị trí.";
+            statusText.style.color = "red";
+            btn.classList.remove('loading');
+        }
+    );
+}
+
+// Cập nhật lại hàm finishSetup để lưu thêm vị trí
+// Bạn tìm hàm finishSetup cũ trong file setup.html hoặc script.js và thay thế/bổ sung dòng này:
+/*
+    const location = document.getElementById('setupLocation').value;
+    localStorage.setItem('userLocation', location);
+*/
