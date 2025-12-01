@@ -3,358 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HenHo Pinky - Tìm người yêu</title>
+    <title>HenHo Vietnam - Tìm người yêu</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CẤU HÌNH GIAO DIỆN HỒNG --- */
+        /* --- CẤU HÌNH GIAO DIỆN --- */
         :root {
-            /* Gradient màu hồng phấn */
-            --primary-grad: linear-gradient(45deg, #ff9a9e, #fecfef, #feada6);
-            --btn-grad: linear-gradient(45deg, #ff758c, #ff7eb3);
-            --bg-color: #ffe6ea; /* Nền hồng nhạt */
+            --primary: #ff4b6a;
+            --gradient: linear-gradient(to right, #fd297b, #ff655b);
+            --bg-color: #ffeef2;
             --white: #ffffff;
-            --heart-color: #ff4d6d;
+            --shadow: 0 10px 30px rgba(253, 41, 123, 0.2);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
 
         body {
             background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
         }
 
-        /* --- HIỆU ỨNG TRÁI TIM BAY NỀN --- */
-        .bg-hearts {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .bg-heart {
-            position: absolute;
-            color: rgba(255, 117, 140, 0.4);
-            animation: floatUp 10s linear infinite;
-            bottom: -50px;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* --- KHUNG ĐIỆN THOẠI --- */
         .app-container {
-            width: 375px;
-            height: 667px;
+            width: 375px; height: 720px;
             background: var(--white);
-            border-radius: 25px;
-            box-shadow: 0 20px 50px rgba(255, 117, 140, 0.3); /* Bóng hồng */
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            z-index: 10; /* Nằm trên trái tim nền */
-            border: 4px solid #fff0f3;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+            border: 8px solid #fff;
         }
 
         /* --- MÀN HÌNH SETUP --- */
         .setup-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--white);
-            z-index: 100;
-            padding: 30px;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            background: #fff; z-index: 200;
+            padding: 30px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
             transition: transform 0.5s ease;
         }
-
-        .logo {
-            font-size: 35px;
-            background: var(--btn-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
+        .logo-text {
+            font-size: 40px; font-weight: 800;
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
-            font-family: 'Comic Sans MS', cursive; /* Font cute */
         }
-
-        .avatar-preview {
-            width: 110px; height: 110px;
-            border-radius: 50%;
-            background: #fff0f3;
-            margin-bottom: 20px;
-            object-fit: cover;
-            border: 3px solid #ff7eb3; /* Viền hồng */
-            padding: 3px;
+        .avatar-upload {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: #f0f0f0; margin-bottom: 20px; object-fit: cover;
+            border: 4px solid #ff655b; cursor: pointer;
         }
-
-        .input-group { width: 100%; margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 5px; color: #ff758c; font-weight: 600; }
-        .input-group input {
-            width: 100%; padding: 12px;
-            border: 2px solid #ffdde1;
-            border-radius: 15px;
-            font-size: 16px; outline: none;
-            color: #555;
+        .input-field, .select-field {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            border: 2px solid #eee; border-radius: 25px;
+            font-size: 16px; outline: none; transition: 0.3s;
+            background: white;
         }
-        .input-group input:focus { border-color: #ff758c; }
-
-        .btn-start {
-            width: 100%; padding: 15px;
-            background: var(--btn-grad);
-            color: white; border: none;
-            border-radius: 30px;
-            font-size: 18px; font-weight: bold;
-            cursor: pointer; margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
-            transition: transform 0.2s;
+        .input-field:focus, .select-field:focus { border-color: #ff4b6a; }
+        
+        .btn-primary {
+            width: 100%; padding: 15px; border-radius: 30px; border: none;
+            background: var(--gradient); color: white;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            box-shadow: var(--shadow); transition: transform 0.2s; margin-top: 10px;
         }
-        .btn-start:hover { transform: scale(1.02); }
+        .btn-primary:active { transform: scale(0.95); }
 
-        /* --- MÀN HÌNH CHÍNH (APP) --- */
+        /* --- MÀN HÌNH CHÍNH --- */
         .app-screen {
             flex: 1; display: flex; flex-direction: column;
             opacity: 0; pointer-events: none; transition: opacity 0.5s;
         }
 
-        .app-header {
-            padding: 15px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #fff0f3;
+        .header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: #fff; z-index: 10;
         }
-        .user-mini-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff7eb3; }
-        .user-mini-name { font-weight: bold; color: #ff758c; margin-left: 10px; }
+        .mini-profile { display: flex; align-items: center; gap: 10px; }
+        .mini-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #fd297b; }
+        .mini-name { font-weight: 700; color: #333; }
 
-        .card-container { flex: 1; position: relative; padding: 15px; perspective: 1000px; }
+        .content-area { flex: 1; position: relative; overflow: hidden; }
 
+        /* Card Stack */
+        .card-stack {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 10px; perspective: 1000px;
+            display: flex; justify-content: center;
+        }
         .card {
-            position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px;
-            background: #000; border-radius: 20px; overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: absolute; width: calc(100% - 20px); height: calc(100% - 80px);
+            border-radius: 20px; background: #000; overflow: hidden;
             background-size: cover; background-position: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             display: flex; flex-direction: column; justify-content: flex-end;
-            transition: transform 0.5s ease, opacity 0.5s ease;
+            transition: transform 0.4s ease, opacity 0.4s ease;
         }
-
-        .card-content {
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(255, 117, 140, 0.9)); /* Gradient hồng */
-            color: white;
+        .card-info {
+            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white;
         }
-        .card h2 { font-size: 26px; margin-bottom: 5px; }
-
-        /* Nút điều khiển */
-        .controls { padding: 20px; display: flex; justify-content: center; gap: 40px; padding-bottom: 30px; }
-        .btn-control {
-            width: 65px; height: 65px; border-radius: 50%; border: none;
-            background: white; font-size: 28px; cursor: pointer;
-            transition: transform 0.2s;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        .card-info h2 { font-size: 26px; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card-info span { font-size: 20px; font-weight: normal; margin-left: 5px; }
+        .badge {
+            background: #2ecc71; font-size: 12px; padding: 3px 8px; border-radius: 10px; 
+            vertical-align: middle; margin-left: 5px;
         }
-        .btn-nope { color: #888; border: 2px solid #eee; }
-        .btn-like { 
-            color: white; 
-            background: var(--btn-grad); 
-            border: none;
-            box-shadow: 0 5px 20px rgba(255, 117, 140, 0.5);
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .swipe-left { transform: translateX(-200%) rotate(-30deg) !important; opacity: 0; }
         .swipe-right { transform: translateX(200%) rotate(30deg) !important; opacity: 0; }
 
-        /* Popup Match */
+        /* Controls */
+        .swipe-controls {
+            position: absolute; bottom: 20px; width: 100%;
+            display: flex; justify-content: center; gap: 30px; z-index: 20;
+        }
+        .ctrl-btn {
+            width: 65px; height: 65px; border-radius: 50%; background: #fff;
+            border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 28px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-nope { color: #ec5e6f; }
+        .btn-like { color: #2ecc71; }
+        .ctrl-btn:active { transform: scale(0.9); }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            height: 70px; background: #fff; border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; align-items: center;
+        }
+        .nav-item { font-size: 24px; color: #ccc; cursor: pointer; }
+        .nav-item.active { color: #ff4b6a; transform: scale(1.1); }
+        .radar-btn {
+            width: 50px; height: 50px; background: var(--gradient);
+            border-radius: 50%; color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(253, 41, 123, 0.4); margin-top: -20px;
+        }
+
+        /* Radar Overlay */
+        .radar-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); z-index: 100;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .radar-circle {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: var(--gradient); position: relative;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 30px;
+        }
+        .radar-circle::after {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            border-radius: 50%; border: 2px solid #ff4b6a;
+            animation: ripple 1.5s infinite linear;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        /* Match Popup */
         .match-popup {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            z-index: 200; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            color: #ff758c; display: none;
-            animation: popIn 0.5s ease;
+            background: rgba(0,0,0,0.9); z-index: 300;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            color: white; animation: fadeIn 0.3s;
         }
-        .match-icon { font-size: 80px; color: #ff4d6d; animation: heartbeat 1s infinite; margin-bottom: 20px; }
-        @keyframes heartbeat { 0% {transform: scale(1);} 20% {transform: scale(1.2);} 40% {transform: scale(1);} 100% {transform: scale(1);} }
-        @keyframes popIn { from {transform: scale(0.5); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-
+        .match-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid white; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <div class="bg-hearts" id="bgHearts">
-        </div>
-
     <div class="app-container">
-        
+
         <div class="setup-screen" id="setupScreen">
-            <div class="logo">LovePink 💖</div>
-            <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/100/ffdde1/ff758c?text=+" alt="Avatar">
+            <h1 class="logo-text">HenHo❤️VN</h1>
+            <img id="setupAvatar" src="https://via.placeholder.com/150/ffedf0/ff4b6a?text=+" class="avatar-upload" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" hidden accept="image/*" onchange="previewAvatar(event)">
             
-            <div class="input-group">
-                <label>Ảnh đại diện cute của bạn</label>
-                <input type="file" id="avatarInput" accept="image/*">
-            </div>
+            <input type="text" id="setupName" class="input-field" placeholder="Tên của bạn...">
+            <input type="number" id="setupAge" class="input-field" placeholder="Tuổi...">
             
-            <div class="input-group">
-                <label>Biệt danh</label>
-                <input type="text" id="userName" placeholder="Ví dụ: Bé Mèo...">
-            </div>
-
-            <div class="input-group">
-                <label>Tuổi</label>
-                <input type="number" id="userAge" placeholder="18+">
-            </div>
-
-            <button class="btn-start" onclick="startApp()">Đi tìm tình yêu 💕</button>
+            <select id="genderPref" class="select-field">
+                <option value="" disabled selected>Bạn muốn tìm ai?</option>
+                <option value="female">Tìm Bạn Nữ 👩</option>
+                <option value="male">Tìm Bạn Nam 👨</option>
+                <option value="all">Tìm Cả Hai 🌈</option>
+            </select>
+            
+            <button class="btn-primary" onclick="enterApp()">Bắt đầu tìm kiếm</button>
         </div>
 
         <div class="app-screen" id="appScreen">
-            <div class="app-header">
-                <div style="display:flex; align-items:center;">
-                    <img id="miniAvatar" class="user-mini-avatar" src="">
-                    <span id="miniName" class="user-mini-name">User</span>
+            <div class="header">
+                <div class="mini-profile">
+                    <img id="navAvatar" src="" class="mini-avatar">
+                    <span id="navName" class="mini-name">User</span>
                 </div>
-                <i class="fas fa-heart" style="color: #ff7eb3; font-size: 24px;"></i>
+                <i class="fas fa-filter" style="color: #ff4b6a; font-size: 20px; cursor: pointer;" onclick="alert('Tính năng lọc nâng cao đang phát triển!')"></i>
             </div>
 
-            <div class="card-container" id="cardStack">
+            <div class="content-area">
+                <div class="card-stack" id="cardStack"></div>
+                
+                <div class="radar-overlay" id="radarScreen">
+                    <div class="radar-circle"><i class="fas fa-search"></i></div>
+                    <h3 style="margin-top: 30px; color: #555;">Đang quét quanh đây...</h3>
+                    <p style="color: #999;" id="radarText">Tìm người phù hợp với bạn</p>
                 </div>
 
-            <div class="controls">
-                <button class="btn-control btn-nope" onclick="swipe('left')"><i class="fas fa-times"></i></button>
-                <button class="btn-control btn-like" onclick="swipe('right')"><i class="fas fa-heart"></i></button>
+                <div class="swipe-controls" id="swipeControls">
+                    <button class="ctrl-btn btn-nope" onclick="swipe('left')"><i class="fas fa-times"></i></button>
+                    <button class="ctrl-btn btn-like" onclick="swipe('right')"><i class="fas fa-heart"></i></button>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-item active"><i class="fas fa-fire-alt"></i></div>
+                <div class="nav-item radar-btn" onclick="randomSearch()"><i class="fas fa-bolt"></i></div>
+                <div class="nav-item"><i class="fas fa-comment-dots"></i></div>
             </div>
         </div>
 
         <div class="match-popup" id="matchPopup">
-            <i class="fas fa-heart match-icon"></i>
-            <h1 style="font-family: 'Comic Sans MS'; color: #ff4d6d;">Tương hợp!</h1>
-            <p style="color: #555; margin-bottom: 30px;">Hai bạn rất đẹp đôi đó nha 😍</p>
-            <button class="btn-start" style="width: 200px;" onclick="closeMatch()">Lướt tiếp</button>
+            <h1 style="font-family:'Brush Script MT', cursive; font-size:60px; color:#2ecc71; transform:rotate(-10deg); margin-bottom:20px;">It's a Match!</h1>
+            <p style="font-size:18px; margin-bottom:30px;">Hai bạn đã tương hợp 💕</p>
+            <div style="display:flex; gap:20px; margin-bottom:40px;">
+                <img id="matchUserImg" src="" class="match-img">
+                <img id="matchTargetImg" src="" class="match-img">
+            </div>
+            <button class="btn-primary" style="width:200px; border:2px solid white; background:transparent;" onclick="closeMatch()">Nói chuyện ngay</button>
+            <button style="background:none; border:none; color:#ccc; margin-top:10px; cursor:pointer;" onclick="closeMatch()">Để sau</button>
         </div>
 
     </div>
 
     <script>
-        // --- 1. TẠO TRÁI TIM BAY NỀN ---
-        function createHearts() {
-            const container = document.getElementById('bgHearts');
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('i');
-                heart.classList.add('fas', 'fa-heart', 'bg-heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                heart.style.animationDelay = Math.random() * 5 + 's';
-                container.appendChild(heart);
-            }
-        }
-        createHearts();
+        // --- 1. DỮ LIỆU NGƯỜI DÙNG VIỆT NAM (CHÂU Á) ---
+        // gender: 'female' (Nữ), 'male' (Nam)
+        const dbProfiles = [
+            // DANH SÁCH NỮ
+            { gender: 'female', name: "Thu Thảo", age: 20, bio: "Sinh viên Ngoại Thương. Thích trà sữa 🧋", img: "https://images.unsplash.com/photo-1532598187460-981002a55927?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'female', name: "Minh Anh", age: 22, bio: "Thích chụp ảnh film và đi Đà Lạt 📸", img: "https://images.unsplash.com/photo-1560946059-45d275726209?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'female', name: "Ngọc Trinh", age: 24, bio: "Tìm người biết nấu ăn ngon 🍜", img: "https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'female', name: "Bảo Thy", age: 19, bio: "Cute phô mai que 🧀", img: "https://images.unsplash.com/photo-1512413914633-b5043f4041ea?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'female', name: "Hương Giang", age: 25, bio: "Thích gym và chạy bộ 🏃‍♀️", img: "https://images.unsplash.com/photo-1596489369325-1e4348259df7?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'female', name: "Thanh Tâm", age: 21, bio: "Yêu mèo, ghét giả dối 🐱", img: "https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'female', name: "Lan Ngọc", age: 23, bio: "Diễn viên tự do, vui tính 🎬", img: "https://images.unsplash.com/photo-1629213568228-1b203c94f58c?auto=format&fit=crop&w=600&q=80" },
 
-        // --- 2. DỮ LIỆU ---
-        const profiles = [
-            { name: "Minh Anh", age: 20, bio: "Thích màu hồng và ghét sự giả dối 🎀", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80" },
-            { name: "Hoàng Tử", age: 22, bio: "Tìm công chúa của đời mình 👑", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80" },
-            { name: "Bé Heo", age: 19, bio: "Thích trà sữa full topping 🧋", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" },
-            { name: "Cool Boy", age: 24, bio: "Yêu nhạc rap và trượt ván 🛹", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" },
-            { name: "Thư Thư", age: 21, bio: "Chụp ảnh film và nghe nhạc Lofi 📸", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" },
-            { name: "Quang Đạt", age: 25, bio: "Kỹ sư IT tìm bạn gái biết nấu ăn 💻", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" },
-            { name: "Tiểu Vy", age: 23, bio: "Yêu mèo hơn yêu người yêu 🐱", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" },
-            { name: "Đức Phúc", age: 26, bio: "Thích hát và đi phượt 🎤", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80" },
-            { name: "Ngọc Lan", age: 22, bio: "Thích đi dạo phố mùa thu 🍂", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" },
-            { name: "Thanh Tùng", age: 27, bio: "Thích đá bóng ⚽", img: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=400&q=80" }
+            // DANH SÁCH NAM
+            { gender: 'male', name: "Quang Hải", age: 24, bio: "Thích đá bóng, tìm bạn xem cùng ⚽", img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'male', name: "Minh Tuấn", age: 26, bio: "Kỹ sư IT, biết sửa máy tính 💻", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'male', name: "Đức Chinh", age: 22, bio: "Vui vẻ, hòa đồng, thích đi phượt 🏍️", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'male', name: "Thanh Sơn", age: 28, bio: "Kinh doanh tự do, trưởng thành 💼", img: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'male', name: "Hoàng Long", age: 25, bio: "Thích chơi Guitar và hát 🎸", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'male', name: "Văn Hậu", age: 23, bio: "Cao 1m85, thích bóng rổ 🏀", img: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=600&q=80" },
+            { gender: 'male', name: "Tuấn Hưng", age: 29, bio: "Tìm mối quan hệ nghiêm túc 💍", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" }
         ];
 
-        let currentProfileIndex = 0;
-        let userAvatarURL = "";
+        let currentUser = { name: "Bạn", age: 18, img: "", likes: 0 };
+        let stack = []; 
+        let currentCardIndex = 0;
 
-        // --- 3. XỬ LÝ ẢNH ---
-        document.getElementById('avatarInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
+        // --- 2. XỬ LÝ ẢNH SETUP ---
+        function previewAvatar(event) {
+            const file = event.target.files[0];
             if (file) {
-                userAvatarURL = URL.createObjectURL(file);
-                document.getElementById('avatarPreview').src = userAvatarURL;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('setupAvatar').src = e.target.result;
+                    currentUser.img = e.target.result;
+                }
+                reader.readAsDataURL(file);
             }
-        });
+        }
 
-        // --- 4. BẮT ĐẦU ---
-        function startApp() {
-            const name = document.getElementById('userName').value;
-            const age = document.getElementById('userAge').value;
-            if (!name || !age) { alert("Bạn chưa nhập tên hoặc tuổi kìa!"); return; }
+        // --- 3. VÀO APP VÀ LỌC DANH SÁCH ---
+        function enterApp() {
+            const name = document.getElementById('setupName').value;
+            const age = document.getElementById('setupAge').value;
+            const genderPref = document.getElementById('genderPref').value;
 
-            document.getElementById('miniName').innerText = `${name}, ${age}`;
-            document.getElementById('miniAvatar').src = userAvatarURL || "https://via.placeholder.com/100/ffdde1/ff758c?text=U";
-            
+            if(!name || !age) { alert("Vui lòng nhập tên và tuổi!"); return; }
+            if(!genderPref) { alert("Vui lòng chọn đối tượng bạn muốn tìm!"); return; }
+
+            // Lưu thông tin
+            currentUser.name = name;
+            currentUser.age = age;
+            document.getElementById('navAvatar').src = currentUser.img || "https://via.placeholder.com/150";
+            document.getElementById('navName').innerText = name;
+            document.getElementById('matchUserImg').src = currentUser.img || "https://via.placeholder.com/150";
+
+            // --- LOGIC LỌC (FILTER) ---
+            if(genderPref === 'all') {
+                stack = dbProfiles.sort(() => Math.random() - 0.5); // Lấy tất cả và trộn
+            } else {
+                // Lọc theo giới tính
+                stack = dbProfiles.filter(p => p.gender === genderPref).sort(() => Math.random() - 0.5);
+            }
+
+            // Chuyển màn hình
             document.getElementById('setupScreen').style.transform = "translateY(-100%)";
-            const appScreen = document.getElementById('appScreen');
-            appScreen.style.opacity = "1";
-            appScreen.style.pointerEvents = "all";
+            document.getElementById('appScreen').style.opacity = "1";
+            document.getElementById('appScreen').style.pointerEvents = "all";
+
             renderCards();
         }
 
-        // --- 5. RENDER THẺ ---
+        // --- 4. RENDER THẺ BÀI ---
         function renderCards() {
-            const cardStack = document.getElementById('cardStack');
-            cardStack.innerHTML = "";
-            [...profiles].reverse().forEach((profile, index) => {
-                const realIndex = profiles.length - 1 - index;
-                if (realIndex < currentProfileIndex) return;
+            const container = document.getElementById('cardStack');
+            container.innerHTML = "";
+            
+            if (stack.length === 0 || currentCardIndex >= stack.length) {
+                container.innerHTML = `<div style="text-align:center; margin-top:50%; color:#888;">
+                    <h2>Hết người phù hợp rồi! 😴</h2>
+                    <p>Thử bấm nút Radar ⚡ để tìm lại</p>
+                </div>`;
+                return;
+            }
+
+            // Render từ dưới lên
+            [...stack].reverse().forEach((profile, i) => {
+                const realIndex = stack.length - 1 - i;
+                if(realIndex < currentCardIndex) return;
 
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.style.backgroundImage = `url(${profile.img})`;
                 card.style.zIndex = 100 - realIndex;
                 card.id = `card-${realIndex}`;
-                
-                if (realIndex > currentProfileIndex) {
-                    card.style.transform = `scale(${1 - (realIndex - currentProfileIndex) * 0.05}) translateY(${(realIndex - currentProfileIndex) * 10}px)`;
+
+                if (realIndex > currentCardIndex) {
+                    card.style.transform = `scale(${1 - (realIndex - currentCardIndex)*0.05}) translateY(${(realIndex - currentCardIndex)*10}px)`;
                 }
 
                 card.innerHTML = `
-                    <div class="card-content">
-                        <h2>${profile.name}, ${profile.age} <i class="fas fa-check-circle" style="font-size:16px; color:#4cca93;"></i></h2>
+                    <div class="card-info">
+                        <h2>${profile.name} <span>${profile.age}</span> <span class="badge">Mới</span></h2>
                         <p>${profile.bio}</p>
                     </div>
                 `;
-                cardStack.appendChild(card);
+                container.appendChild(card);
             });
         }
 
-        // --- 6. SWIPE ---
+        // --- 5. LOGIC SWIPE ---
         function swipe(direction) {
-            if (currentProfileIndex >= profiles.length) { alert("Hết người rồi huhu!"); return; }
-            const currentCard = document.getElementById(`card-${currentProfileIndex}`);
+            if(currentCardIndex >= stack.length) return;
+
+            const card = document.getElementById(`card-${currentCardIndex}`);
+            const profile = stack[currentCardIndex];
             
-            if (direction === 'left') currentCard.classList.add('swipe-left');
-            else {
-                currentCard.classList.add('swipe-right');
-                // Tỷ lệ Match cao hơn (50%)
-                if (Math.random() > 0.5) setTimeout(() => document.getElementById('matchPopup').style.display = "flex", 500);
+            if(direction === 'left') {
+                card.classList.add('swipe-left');
+            } else {
+                card.classList.add('swipe-right');
+                
+                // Random Match (30%)
+                if(Math.random() > 0.7) {
+                    setTimeout(() => showMatch(profile), 500);
+                }
             }
 
             setTimeout(() => {
-                currentCard.remove();
-                currentProfileIndex++;
-                updateStackView();
+                card.remove();
+                currentCardIndex++;
+                updateStackDepth();
+                if(currentCardIndex >= stack.length) renderCards();
             }, 300);
         }
 
-        function updateStackView() {
-            document.querySelectorAll('.card').forEach((card, i) => {
-                card.style.transform = `scale(${1 - (i * 0.05)}) translateY(${i * 10}px)`;
+        function updateStackDepth() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((c, i) => {
+                c.style.transform = `scale(${1 - i*0.05}) translateY(${i*10}px)`;
             });
         }
 
+        // --- 6. TÌM KIẾM NGẪU NHIÊN (RADAR) ---
+        function randomSearch() {
+            const radar = document.getElementById('radarScreen');
+            radar.style.display = "flex";
+            document.getElementById('radarText').innerText = "Đang tìm kiếm người mới...";
+
+            setTimeout(() => {
+                radar.style.display = "none";
+                // Reset lại chồng bài và trộn lại
+                stack = stack.sort(() => Math.random() - 0.5);
+                currentCardIndex = 0;
+                renderCards();
+            }, 2000);
+        }
+
+        // --- 7. MATCH POPUP ---
+        function showMatch(targetProfile) {
+            document.getElementById('matchTargetImg').src = targetProfile.img;
+            document.getElementById('matchPopup').style.display = "flex";
+        }
         function closeMatch() {
             document.getElementById('matchPopup').style.display = "none";
         }
+
     </script>
 </body>
 </html>
