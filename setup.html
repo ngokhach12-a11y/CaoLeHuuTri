@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>HenHo - Tạo Hồ Sơ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container" style="background: linear-gradient(135deg, #fff0f3 0%, #ffe6ea 100%);">
+        <div class="main-content">
+            <div class="setup-box">
+                <h1 style="color: var(--primary); margin-bottom: 10px;">Chào bạn mới! 👋</h1>
+                <p style="color: #888; margin-bottom: 30px;">Hãy cho mọi người biết bạn là ai nhé.</p>
+
+                <img id="setupAvatar" src="https://via.placeholder.com/150/ffdde1/ff758c?text=+" class="avatar-upload-circle" onclick="document.getElementById('avatarInput').click()">
+                <input type="file" id="avatarInput" hidden onchange="previewSetupAvatar(event)">
+                <p style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Chạm để tải ảnh đại diện</p>
+
+                <div class="form-group">
+                    <label class="label">Tên biệt danh</label>
+                    <input type="text" id="setupName" class="input-box" placeholder="Ví dụ: Cún Con...">
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label class="label">Tuổi</label>
+                        <input type="number" id="setupAge" class="input-box" placeholder="18+">
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="label">Giới tính</label>
+                        <select id="setupGender" class="input-box">
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="lgbt">LGBT</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Sở thích của bạn (Chọn ít nhất 3)</label>
+                    <div class="tags-container">
+                        <div class="tag" onclick="toggleTag(this)">🍜 Ăn uống</div>
+                        <div class="tag" onclick="toggleTag(this)">✈️ Du lịch</div>
+                        <div class="tag" onclick="toggleTag(this)">🎮 Game</div>
+                        <div class="tag" onclick="toggleTag(this)">⚽ Thể thao</div>
+                        <div class="tag" onclick="toggleTag(this)">🎵 Âm nhạc</div>
+                        <div class="tag" onclick="toggleTag(this)">🐶 Thú cưng</div>
+                        <div class="tag" onclick="toggleTag(this)">📚 Đọc sách</div>
+                        <div class="tag" onclick="toggleTag(this)">💻 Code dạo</div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="finishSetup()">Hoàn Tất & Bắt Đầu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Script riêng cho trang setup
+        function previewSetupAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('setupAvatar').src = e.target.result;
+                    // Lưu ảnh vào localStorage để dùng cho các trang sau
+                    localStorage.setItem('userAvatar', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function finishSetup() {
+            const name = document.getElementById('setupName').value;
+            const age = document.getElementById('setupAge').value;
+            
+            if(!name || !age) {
+                alert("Vui lòng nhập tên và tuổi!");
+                return;
+            }
+            
+            // Lưu thông tin cơ bản
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userAge', age);
+            
+            // Chuyển sang trang chính
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
