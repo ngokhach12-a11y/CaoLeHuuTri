@@ -98,24 +98,26 @@
 
         // 2. Xử lý khi bấm nút Hoàn Tất
         function finishSetup() {
-            const name = document.getElementById('setupName').value;
-            const age = document.getElementById('setupAge').value;
-            const myGender = document.getElementById('myGender').value;
-            const targetGender = document.getElementById('targetGender').value; // Lấy giá trị mong muốn tìm kiếm
-            
-            if(!name || !age) {
-                alert("Vui lòng nhập tên và tuổi!");
-                return;
-            }
-            
-            // Lưu toàn bộ thông tin vào LocalStorage
-            localStorage.setItem('userName', name);
-            localStorage.setItem('userAge', age);
-            localStorage.setItem('myGender', myGender);
-            localStorage.setItem('targetGender', targetGender); // Lưu lại để sau này lọc
-            
-            // Chuyển sang trang chính
-            window.location.href = 'index.html';
+    const name = document.getElementById('setupName').value;
+    const age = document.getElementById('setupAge').value;
+    const myGender = document.getElementById('myGender').value;
+    const targetGender = document.getElementById('targetGender').value;
+    // LẤY THÊM VỊ TRÍ
+    const location = document.getElementById('setupLocation').value; 
+    
+    if(!name || !age) {
+        alert("Vui lòng nhập tên và tuổi!");
+        return;
+    }
+    
+    // Lưu toàn bộ
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userAge', age);
+    localStorage.setItem('myGender', myGender);
+    localStorage.setItem('targetGender', targetGender);
+    localStorage.setItem('userLocation', location || "Đang ở đâu đó 🌍"); // Lưu vị trí
+    
+    window.location.href = 'index.html';
         }
     </script>
 </body>
