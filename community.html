@@ -187,4 +187,146 @@
             { name: "Bảo Ngọc", avatar: "https://i.pravatar.cc/150?img=9", tag: "🎬 Phim ảnh", time: "1 giờ trước", content: "Mình dư 1 vé xem phim 'Mai' suất 20h tối nay. Bạn nam nào rảnh đi xem cùng mình không? 🍿", img: "https://via.placeholder.com/500x300/000000/ffffff?text=Anh+Rap+Phim" },
             { name: "Thanh Tùng", avatar: "https://i.pravatar.cc/150?img=8", tag: "🎸 Âm nhạc", time: "2 giờ trước", content: "Chiều nay xách đàn ra công viên hát hò chút không? Mình đàn, cần tìm bạn nữ hát hay 🎵", img: "https://via.placeholder.com/500x300/ffcc99/333?text=Anh+Guitar" },
             { name: "Lan Anh", avatar: "https://i.pravatar.cc/150?img=1", tag: "🍜 Ăn uống", time: "3 giờ trước", content: "Trời mưa lạnh thế này tự nhiên thèm lẩu quá. Ai đi cùng không, share tiền 50/50 nhaaa 🍲", img: "https://via.placeholder.com/500x300/ff9999/ffffff?text=Anh+Lau" },
-            { name: "Quốc Huy", avatar: "
+            { name: "Quốc Huy", avatar: "https://i.pravatar.cc/150?img=12", tag: "✈️ Du lịch", time: "5 giờ trước", content: "Sắp tới mình định đi phượt Hà Giang. Cần tìm bạn đồng hành vui tính 🌸🏍️", img: "https://via.placeholder.com/500x300/99ccff/333?text=Anh+Phuot" },
+            { name: "Tiểu Mèo", avatar: "https://i.pravatar.cc/150?img=4", tag: "🐶 Thú cưng", time: "6 giờ trước", content: "Chiều nay mình dắt bé Corgi đi dạo công viên. Ai yêu chó thì ra chơi chung nhen 🐕", img: "https://via.placeholder.com/500x300/ffeda0/333?text=Anh+Corgi" },
+            { name: "Phương Ly", avatar: "https://i.pravatar.cc/150?img=2", tag: "📚 Học tập", time: "1 ngày trước", content: "Tìm bạn học cùng tiếng Anh giao tiếp tại thư viện thành phố vào cuối tuần. 📖", img: "https://via.placeholder.com/500x300/eeeeee/333?text=Anh+Sach" },
+            { name: "Tuấn Hưng", avatar: "https://i.pravatar.cc/150?img=60", tag: "💬 Tâm sự", time: "Vừa xong", content: "Thất tình buồn quá, có ai rảnh call tâm sự xíu không? Voice chat ẩn danh cũng được... 💔", img: "" }
+        ];
+
+        // --- DATA REELS ---
+        const reelsData = [
+            { src: "images/reel1.mp4", user: "@MiuMiu", desc: "Phố lên đèn là em lên đồ 💃 #nightvibes" },
+            { src: "images/reel2.mp4", user: "@ThienNhien", desc: "Mùa hoa đẹp nhất năm 🌼 #flower #travel" },
+            { src: "images/reel3.mp4", user: "@BienXanh", desc: "Biển Vũng Tàu hôm nay êm quá 🌊 #vitaminsea" },
+            { src: "images/reel4.mp4", user: "@GymGirl", desc: "Chạy bộ mỗi sáng 💪 #fitness #gym" },
+            { src: "images/reel5.mp4", user: "@TechReview", desc: "Unboxing điện thoại mới 📱 #review" },
+            { src: "images/reel6.mp4", user: "@MeoMeo", desc: "Hoàng thượng nhà em 🐱 #catlover" },
+            { src: "images/reel7.mp4", user: "@CampingVN", desc: "Cuối tuần đi cắm trại ⛺🔥 #camping" },
+            { src: "images/reel8.mp4", user: "@YogaLife", desc: "Thư giãn buổi sáng 🧘‍♀️ #yoga" },
+            { src: "images/reel9.mp4", user: "@TamSu", desc: "Call video với người yêu xa 💕 #love" },
+            { src: "images/reel10.mp4", user: "@HappyNewYear", desc: "Pháo hoa đẹp quá! 🎆 #fireworks" }
+        ];
+
+        // --- RENDER FEED ---
+        function renderFeed() {
+            const container = document.getElementById('feedSection');
+            let html = '';
+            dummyPosts.forEach(post => {
+                // Kiểm tra nếu có ảnh thì hiện, không thì thôi
+                let mediaHtml = '';
+                if(post.img) {
+                    mediaHtml = `<div class="post-media"><img src="${post.img}" alt="Ảnh bài viết"></div>`;
+                }
+
+                html += `
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="${post.avatar}" class="post-avatar">
+                        <div class="post-info">
+                            <h4>${post.name}</h4>
+                            <span>${post.time}</span>
+                        </div>
+                        <div class="post-tag">${post.tag}</div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    ${mediaHtml}
+                    <div class="post-actions">
+                        <div class="action-item"><i class="far fa-heart"></i> Thích</div>
+                        <div class="action-item"><i class="far fa-comment-alt"></i> Bình luận</div>
+                        <div class="action-item"><i class="fas fa-share"></i> Chia sẻ</div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- RENDER REELS ---
+        function renderReels() {
+             const container = document.getElementById('reelsSection');
+             let html = '';
+             reelsData.forEach((reel) => {
+                 html += `
+                <div class="reel-video-item">
+                    <video class="reel-video-player" src="${reel.src}" loop onclick="this.paused?this.play():this.pause()"></video>
+                    <div class="reel-ui">
+                        <h3>${reel.user} <i class="fas fa-check-circle" style="color: #2ed573; font-size: 14px;"></i></h3>
+                        <p>${reel.desc}</p>
+                    </div>
+                    <div class="reel-side-bar">
+                        <div class="reel-icon"><i class="fas fa-heart"></i><span>12k</span></div>
+                        <div class="reel-icon"><i class="fas fa-comment-dots"></i><span>342</span></div>
+                        <div class="reel-icon"><i class="fas fa-share"></i><span>Share</span></div>
+                    </div>
+                </div>`;
+             });
+             container.innerHTML = html;
+        }
+
+        // --- CHUYỂN TAB ---
+        function switchTab(tab) {
+            const feed = document.getElementById('feedSection');
+            const reels = document.getElementById('reelsSection');
+            const btnFeed = document.getElementById('tabFeed');
+            const btnReels = document.getElementById('tabReels');
+            const fab = document.querySelector('.fab-post');
+
+            if(tab === 'feed') {
+                feed.style.display = 'block';
+                reels.style.display = 'none';
+                btnFeed.classList.add('active');
+                btnReels.classList.remove('active');
+                fab.style.display = 'flex';
+                document.querySelectorAll('video').forEach(v => v.pause());
+            } else {
+                feed.style.display = 'none';
+                reels.style.display = 'block';
+                btnFeed.classList.remove('active');
+                btnReels.classList.add('active');
+                fab.style.display = 'none';
+                
+                // Nếu chưa có nội dung thì render
+                if(reels.innerHTML.trim() === "") renderReels();
+                
+                // Phát video đầu tiên
+                setTimeout(() => {
+                    const vid = reels.querySelector('video');
+                    if(vid) vid.play();
+                }, 500);
+            }
+        }
+
+        // --- LOGIC ĐĂNG BÀI ---
+        function openPostModal() { document.getElementById('postModal').style.display = 'flex'; }
+        function submitNewPost() {
+            const content = document.getElementById('newPostContent').value;
+            const imgInput = document.getElementById('newPostImg');
+            
+            if(!content) { alert('Viết gì đó đi bạn ơi!'); return; }
+
+            let mediaUrl = "";
+            if(imgInput.files && imgInput.files[0]) {
+                mediaUrl = URL.createObjectURL(imgInput.files[0]);
+            } else {
+                mediaUrl = "https://via.placeholder.com/500x300/ffedf0/ff6b81?text=Anh+Tu+Chon";
+            }
+
+            const newPost = {
+                name: "Bạn (Mới)", 
+                avatar: localStorage.getItem('userAvatar') || "https://via.placeholder.com/150",
+                tag: "🌟 Mới",
+                time: "Vừa xong",
+                content: content,
+                img: mediaUrl
+            };
+
+            dummyPosts.unshift(newPost);
+            renderFeed();
+            document.getElementById('postModal').style.display = 'none';
+            document.getElementById('newPostContent').value = '';
+        }
+
+        // CHẠY LẦN ĐẦU
+        renderFeed();
+    </script>
+</body>
+</html>
