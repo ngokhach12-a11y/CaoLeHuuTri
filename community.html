@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Cộng Đồng - HenHo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="page-title">Cộng Đồng 🌏</div>
+            <i class="fas fa-bell" style="color: #ccc; font-size: 20px;"></i>
+        </div>
+
+        <!-- Tab Chuyển Đổi -->
+        <div class="top-tabs">
+            <div class="tab-btn active" onclick="switchCommunityTab('feed')" id="tabFeed">Bảng Tin</div>
+            <div class="tab-btn" onclick="switchCommunityTab('reels')" id="tabReels">Reels</div>
+        </div>
+
+        <!-- Nội Dung Chính -->
+        <div class="main-content" style="display: block; padding: 0;">
+            
+            <!-- 1. FEED SECTION -->
+            <div class="feed-container" id="feedSection">
+                <!-- JS sẽ render 10 bài viết vào đây -->
+            </div>
+
+            <!-- 2. REELS SECTION -->
+            <div class="reels-container" id="reelsSection">
+                <!-- Video mẫu 1 -->
+                <div class="reel-video-item">
+                    <video class="reel-video-player" src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4" loop onclick="toggleReel(this)"></video>
+                    <div class="reel-ui">
+                        <h3>@MiuMiu <i class="fas fa-check-circle" style="color: #2ed573; font-size: 14px;"></i></h3>
+                        <p>Đi dạo phố đêm nay không? 🌃 #chill #hanoi</p>
+                    </div>
+                    <div class="reel-side-bar">
+                        <div class="reel-icon"><i class="fas fa-heart"></i><span>1.2k</span></div>
+                        <div class="reel-icon"><i class="fas fa-comment-dots"></i><span>342</span></div>
+                        <div class="reel-icon"><i class="fas fa-share"></i><span>Share</span></div>
+                    </div>
+                </div>
+                <!-- Video mẫu 2 -->
+                <div class="reel-video-item">
+                    <video class="reel-video-player" src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" loop onclick="toggleReel(this)"></video>
+                    <div class="reel-ui">
+                        <h3>@HoangTuBien</h3>
+                        <p>Ai đi Vũng Tàu cuối tuần này không? 🌊</p>
+                    </div>
+                    <div class="reel-side-bar">
+                        <div class="reel-icon"><i class="fas fa-heart"></i><span>890</span></div>
+                        <div class="reel-icon"><i class="fas fa-comment-dots"></i><span>120</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Nút Đăng Bài (FAB) -->
+        <div class="fab-post" onclick="openPostModal()">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <!-- Bottom Nav -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item"><i class="fas fa-fire"></i></a>
+            <a href="random.html" class="nav-item"><i class="fas fa-bolt"></i></a>
+            <!-- Tab Cộng đồng được highlight -->
+            <a href="community.html" class="nav-item active"><i class="fas fa-globe-asia"></i></a>
+            <a href="chat.html" class="nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i></a>
+        </nav>
+
+        <!-- MODAL ĐĂNG BÀI (ẨN) -->
+        <div id="postModal" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:200; justify-content:center; align-items:center;">
+            <div style="background:white; width:90%; border-radius:20px; padding:20px; animation: popIn 0.3s;">
+                <h3 style="text-align:center; color:var(--primary); margin-bottom:15px;">Đăng Bài Mới</h3>
+                <textarea id="newPostContent" style="width:100%; border:1px solid #eee; border-radius:10px; padding:10px; font-family:sans-serif;" rows="4" placeholder="Bạn đang tìm kèo gì thế? (Cafe, Game, Cinema...)"></textarea>
+                
+                <div style="margin: 15px 0; display:flex; gap:10px;">
+                    <label style="flex:1; background:#f0f2f5; padding:10px; border-radius:10px; text-align:center; cursor:pointer;">
+                        <i class="fas fa-image" style="color:#45bd62;"></i> Ảnh
+                        <input type="file" hidden accept="image/*" id="newPostImg" onchange="alert('Đã chọn ảnh!')">
+                    </label>
+                    <label style="flex:1; background:#f0f2f5; padding:10px; border-radius:10px; text-align:center; cursor:pointer;">
+                        <i class="fas fa-video" style="color:#f3425f;"></i> Video
+                        <input type="file" hidden accept="video/*" id="newPostVid" onchange="alert('Đã chọn video!')">
+                    </label>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <button onclick="document.getElementById('postModal').style.display='none'" style="flex:1; padding:10px; border:none; background:#eee; border-radius:20px; cursor:pointer;">Hủy</button>
+                    <button onclick="submitNewPost()" style="flex:1; padding:10px; border:none; background:var(--gradient); color:white; border-radius:20px; font-weight:bold; cursor:pointer;">Đăng Ngay</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script Riêng cho trang này -->
+    <script>
+        // 1. DỮ LIỆU 10 BÀI VIẾT MẪU (Litmatch Style)
+        const dummyPosts = [
+            { name: "Minh Quân", avatar: "https://i.pravatar.cc/150?img=11", tag: "🎮 Game", time: "5 phút trước", content: "Cần tìm 1 bạn nữ dual Leo Rank Liên Quân tối nay ạ! Mình đi rừng gánh team 🗡️", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" },
+            { name: "Thu Thảo", avatar: "https://i.pravatar.cc/150?img=5", tag: "☕ Cafe", time: "15 phút trước", content: "Cuối tuần rảnh rỗi, có ai muốn đi Cafe chụp ảnh ở Quận 1 không? Mình biết nhiều quán xinh lắm 📸", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=500" },
+            { name: "Hải Đăng", avatar: "https://i.pravatar.cc/150?img=3", tag: "⚽ Thể thao", time: "30 phút trước", content: "Team mình thiếu 1 slot đá bóng sân 7 tối nay 19h. Ai đá được inbox nhé!", img: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500" },
+            { name: "Bảo Ngọc", avatar: "https://i.pravatar.cc/150?img=9", tag: "🎬 Phim ảnh", time: "1 giờ trước", content: "Dư 1 vé xem phim Doraemon tối nay. Có bạn nam nào rảnh đi cùng không nè? 🍿", img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500" },
+            { name: "Thanh Tùng", avatar: "https://i.pravatar.cc/150?img=8", tag: "🎸 Âm nhạc", time: "2 giờ trước", content: "Mình biết đánh Guitar, tìm bạn nữ hát hay để lập nhóm Acoustic đi diễn ạ 🎵", img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=500" },
+            { name: "Lan Anh", avatar: "https://i.pravatar.cc/150?img=1", tag: "🍜 Ăn uống", time: "3 giờ trước", content: "Thèm lẩu Haidilao quá mà đi 1 mình buồn. Ai đi cùng mình bao nước nhaaa 🍲", img: "https://images.unsplash.com/photo-1555126634-323283e090fa?w=500" },
+            { name: "Quốc Huy", avatar: "https://i.pravatar.cc/150?img=12", tag: "✈️ Du lịch", time: "5 giờ trước", content: "Sắp đi Đà Lạt 3 ngày 2 đêm. Cần tìm bạn đồng hành vui tính, biết chụp ảnh càng tốt 🌲", img: "https://images.unsplash.com/photo-1560946059-45d275726209?w=500" },
+            { name: "Mèo Con", avatar: "https://i.pravatar.cc/150?img=4", tag: "💬 Tâm sự", time: "Vừa xong", content: "Nay trời mưa buồn quá, ai call tâm sự xíu không? Voice chat nhé 🌧️", img: "" }, // Bài viết không ảnh
+            { name: "Đức Thịnh", avatar: "https://i.pravatar.cc/150?img=7", tag: "🐶 Thú cưng", time: "6 giờ trước", content: "Dắt Boss đi dạo công viên. Ai yêu Corgi thì ra chơi chung nha 🐕", img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=500" },
+            { name: "Phương Ly", avatar: "https://i.pravatar.cc/150?img=2", tag: "📚 Học tập", time: "1 ngày trước", content: "Tìm bạn học cùng tiếng Anh giao tiếp tại thư viện thành phố. Nghiêm túc ạ!", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500" }
+        ];
+
+        // 2. RENDER FEED
+        function renderFeed() {
+            const container = document.getElementById('feedSection');
+            let html = '';
+            dummyPosts.forEach(post => {
+                const imgHtml = post.img ? `<div class="post-media"><img src="${post.img}"></div>` : '';
+                html += `
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="${post.avatar}" class="post-avatar">
+                        <div class="post-info">
+                            <h4>${post.name}</h4>
+                            <span>${post.time}</span>
+                        </div>
+                        <div class="post-tag">${post.tag}</div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    ${imgHtml}
+                    <div class="post-actions">
+                        <div class="action-item" onclick="this.classList.toggle('liked')">
+                            <i class="fas fa-heart"></i> Thích
+                        </div>
+                        <div class="action-item">
+                            <i class="fas fa-comment-alt"></i> Bình luận
+                        </div>
+                        <div class="action-item">
+                            <i class="fas fa-share"></i> Chia sẻ
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // 3. CHỨC NĂNG ĐĂNG BÀI
+        function openPostModal() {
+            document.getElementById('postModal').style.display = 'flex';
+        }
+
+        function submitNewPost() {
+            const content = document.getElementById('newPostContent').value;
+            if(!content) { alert('Viết gì đó đi bạn ơi!'); return; }
+
+            const newPost = {
+                name: "Bạn (Mới)", 
+                avatar: localStorage.getItem('userAvatar') || "https://via.placeholder.com/50",
+                tag: "🌟 Mới",
+                time: "Vừa xong",
+                content: content,
+                img: "https://via.placeholder.com/500x300/ffedf0/ff6b81?text=Anh+Moi+Dang" // Demo ảnh
+            };
+
+            dummyPosts.unshift(newPost); // Thêm vào đầu mảng
+            renderFeed(); // Vẽ lại
+            document.getElementById('postModal').style.display = 'none'; // Đóng modal
+            document.getElementById('newPostContent').value = ''; // Xóa chữ
+        }
+
+        // 4. CHUYỂN TAB FEED / REELS
+        function switchCommunityTab(tab) {
+            const feed = document.getElementById('feedSection');
+            const reels = document.getElementById('reelsSection');
+            const btnFeed = document.getElementById('tabFeed');
+            const btnReels = document.getElementById('tabReels');
+            const fab = document.querySelector('.fab-post');
+
+            if(tab === 'feed') {
+                feed.style.display = 'block';
+                reels.style.display = 'none';
+                btnFeed.classList.add('active');
+                btnReels.classList.remove('active');
+                fab.style.display = 'flex'; // Hiện nút đăng bài
+                
+                // Dừng video reels
+                document.querySelectorAll('video').forEach(v => v.pause());
+            } else {
+                feed.style.display = 'none';
+                reels.style.display = 'block';
+                btnFeed.classList.remove('active');
+                btnReels.classList.add('active');
+                fab.style.display = 'none'; // Ẩn nút đăng bài khi xem Reels
+            }
+        }
+
+        function toggleReel(video) {
+            if(video.paused) video.play();
+            else video.pause();
+        }
+
+        // CHẠY LẦN ĐẦU
+        renderFeed();
+
+    </script>
+</body>
+</html>
