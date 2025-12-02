@@ -136,3 +136,55 @@ const userLoc = localStorage.getItem('userLocation');
 if(document.getElementById('locText') && userLoc) {
     document.getElementById('locText').innerText = userLoc;
 }
+// Hàm mở Bottom Sheet
+function openBottomSheet() {
+    document.getElementById('bottomSheetOverlay').style.display = 'block';
+    // Đợi 1 chút để trình duyệt render rồi mới trượt lên cho mượt
+    setTimeout(() => {
+        document.getElementById('bottomSheet').style.bottom = '0';
+    }, 10);
+    
+    // Tự động focus vào ô nhập
+    document.getElementById('realInput').focus();
+}
+
+// Hàm đóng Bottom Sheet
+function closeBottomSheet() {
+    document.getElementById('bottomSheet').style.bottom = '-100%';
+    setTimeout(() => {
+        document.getElementById('bottomSheetOverlay').style.display = 'none';
+    }, 300);
+}
+
+// Hàm Đăng bài (LOGIC QUAN TRỌNG NHẤT)
+function submitPost() {
+    const input = document.getElementById('realInput');
+    const content = input.value;
+
+    if (content.trim() === "") {
+        alert("Bạn chưa viết gì cả!");
+        return;
+    }
+
+    // 1. Tạo HTML cho bài viết mới
+    const newPostHTML = `
+        <div class="post-card">
+            <div class="post-header">
+                <img src="https://via.placeholder.com/40" class="avatar">
+                <div>
+                    <div class="post-name">Cao Lê Hữu Trí</div>
+                    <div class="post-time">Vừa xong</div>
+                </div>
+            </div>
+            <div class="post-content">${content}</div>
+        </div>
+    `;
+
+    // 2. Chèn vào ĐẦU danh sách (afterbegin = ngay sau thẻ mở của feed-container)
+    const feedContainer = document.getElementById('feed-container');
+    feedContainer.insertAdjacentHTML('afterbegin', newPostHTML);
+
+    // 3. Reset và đóng menu
+    input.value = ""; // Xóa chữ trong ô nhập
+    closeBottomSheet(); // Đóng menu
+}
