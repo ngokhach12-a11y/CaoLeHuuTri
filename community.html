@@ -33,127 +33,112 @@
         </nav>
     </div>
 
-   <script>
-        // --- 1. DỮ LIỆU 10 BÀI VIẾT FEED (MẪU) ---
-        // Lưu ý: Ảnh đang để link Placeholder. Bạn thay link ảnh thật vào chỗ 'img' nhé.
+  <script>
+        // --- 1. DỮ LIỆU FEED (GIỮ NGUYÊN) ---
         const dummyPosts = [
+            { name: "Minh Quân", avatar: "https://i.pravatar.cc/150?img=11", tag: "🎮 Game", time: "5 phút trước", content: "Tối nay cuối tuần có ai dual Rank Liên Quân không? Mình đi rừng bao gánh team! 🗡️", img: "https://via.placeholder.com/500x300/e0e0e0/333?text=Anh+Game" },
+            { name: "Thu Thảo", avatar: "https://i.pravatar.cc/150?img=5", tag: "☕ Cafe", time: "15 phút trước", content: "Mới tìm được quán Cafe tone trắng xinh xỉu ở Quận 1. Đi chung với mình nè 📸✨", img: "https://via.placeholder.com/500x300/ffeef2/ff6b81?text=Anh+Cafe" },
+            { name: "Hải Đăng", avatar: "https://i.pravatar.cc/150?img=3", tag: "⚽ Thể thao", time: "30 phút trước", content: "Sân bóng cỏ nhân tạo khu vực Cầu Giấy tối nay 19h thiếu 2 slot. Anh em nào rảnh giao lưu nhé! ⚽", img: "https://via.placeholder.com/500x300/c1f0c1/2ed573?text=Anh+Bong+Da" },
+            { name: "Bảo Ngọc", avatar: "https://i.pravatar.cc/150?img=9", tag: "🎬 Phim ảnh", time: "1 giờ trước", content: "Mình dư 1 vé xem phim 'Mai' suất 20h tối nay. Bạn nam nào rảnh đi xem cùng mình không? 🍿", img: "https://via.placeholder.com/500x300/000000/ffffff?text=Anh+Rap+Phim" },
+            { name: "Thanh Tùng", avatar: "https://i.pravatar.cc/150?img=8", tag: "🎸 Âm nhạc", time: "2 giờ trước", content: "Chiều nay xách đàn ra công viên hát hò chút không? Mình đàn, cần tìm bạn nữ hát hay 🎵", img: "https://via.placeholder.com/500x300/ffcc99/333?text=Anh+Guitar" },
+            { name: "Lan Anh", avatar: "https://i.pravatar.cc/150?img=1", tag: "🍜 Ăn uống", time: "3 giờ trước", content: "Trời mưa lạnh thế này tự nhiên thèm lẩu quá. Ai đi cùng không, share tiền 50/50 nhaaa 🍲", img: "https://via.placeholder.com/500x300/ff9999/ffffff?text=Anh+Lau" },
+            { name: "Quốc Huy", avatar: "https://i.pravatar.cc/150?img=12", tag: "✈️ Du lịch", time: "5 giờ trước", content: "Sắp tới mình định đi phượt Hà Giang. Cần tìm bạn đồng hành vui tính 🌸🏍️", img: "https://via.placeholder.com/500x300/99ccff/333?text=Anh+Phuot" },
+            { name: "Tiểu Mèo", avatar: "https://i.pravatar.cc/150?img=4", tag: "🐶 Thú cưng", time: "6 giờ trước", content: "Chiều nay mình dắt bé Corgi đi dạo công viên. Ai yêu chó thì ra chơi chung nhen 🐕", img: "https://via.placeholder.com/500x300/ffeda0/333?text=Anh+Corgi" },
+            { name: "Phương Ly", avatar: "https://i.pravatar.cc/150?img=2", tag: "📚 Học tập", time: "1 ngày trước", content: "Tìm bạn học cùng tiếng Anh giao tiếp tại thư viện thành phố vào cuối tuần. 📖", img: "https://via.placeholder.com/500x300/eeeeee/333?text=Anh+Sach" },
+            { name: "Tuấn Hưng", avatar: "https://i.pravatar.cc/150?img=60", tag: "💬 Tâm sự", time: "Vừa xong", content: "Thất tình buồn quá, có ai rảnh call tâm sự xíu không? Voice chat ẩn danh cũng được... 💔", img: "" }
+        ];
+
+        // --- 2. DỮ LIỆU REELS (ĐÃ CẬP NHẬT THEO LINK CỦA BẠN) ---
+        // Bạn nhớ upload file reel1.mp4 -> reel10.mp4 vào thư mục images trên Github nhé
+        const reelsData = [
             { 
-                name: "Minh Quân", avatar: "https://i.pravatar.cc/150?img=11", tag: "🎮 Game", time: "5 phút trước", 
-                content: "Tối nay cuối tuần có ai dual Rank Liên Quân không? Mình đi rừng bao gánh team! Cần tìm 1 bạn nữ support dễ thương ạ 🗡️", 
-                img: "https://via.placeholder.com/500x300/e0e0e0/333?text=Anh+Game+Lien+Quan" 
+                src: "images/reel1.mp4", // Link 1: https://vt.tiktok.com/ZSfGXVpjY/
+                user: "@MiuMiu", 
+                desc: "Phố lên đèn là em lên đồ 💃 #nightvibes #chill" 
             },
             { 
-                name: "Thu Thảo", avatar: "https://i.pravatar.cc/150?img=5", tag: "☕ Cafe", time: "15 phút trước", 
-                content: "Mới tìm được quán Cafe tone trắng xinh xỉu ở Quận 1. Có bạn nào thích chụp ảnh sống ảo không, đi chung với mình nè 📸✨", 
-                img: "https://via.placeholder.com/500x300/ffeef2/ff6b81?text=Anh+Quan+Cafe" 
+                src: "images/reel2.mp4", // Link 2: https://vt.tiktok.com/ZSfGXuxJT/
+                user: "@ThienNhien", 
+                desc: "Mùa hoa đẹp nhất năm, ai đi chụp ảnh không? 🌼 #flower #travel" 
             },
             { 
-                name: "Hải Đăng", avatar: "https://i.pravatar.cc/150?img=3", tag: "⚽ Thể thao", time: "30 phút trước", 
-                content: "Sân bóng cỏ nhân tạo khu vực Cầu Giấy tối nay 19h thiếu 2 slot. Anh em nào rảnh xách giày ra giao lưu nhé! ⚽🏃", 
-                img: "https://via.placeholder.com/500x300/c1f0c1/2ed573?text=Anh+San+Bong" 
+                src: "images/reel3.mp4", // Link 3: https://vt.tiktok.com/ZSfG4dTsa/
+                user: "@BienXanh", 
+                desc: "Biển Vũng Tàu hôm nay êm quá 🌊 #vitaminsea #travel" 
             },
             { 
-                name: "Bảo Ngọc", avatar: "https://i.pravatar.cc/150?img=9", tag: "🎬 Phim ảnh", time: "1 giờ trước", 
-                content: "Mình dư 1 vé xem phim 'Mai' suất 20h tối nay tại CGV. Bạn nam nào rảnh đi xem cùng mình không? Mình mời bắp nước 🍿", 
-                img: "https://via.placeholder.com/500x300/000000/ffffff?text=Anh+Rap+Phim" 
+                src: "images/reel4.mp4", // Link 4: https://vt.tiktok.com/ZSfG4MHmh/
+                user: "@GymGirl", 
+                desc: "Chạy bộ mỗi sáng để có body đẹp 💪 #fitness #gym" 
             },
             { 
-                name: "Thanh Tùng", avatar: "https://i.pravatar.cc/150?img=8", tag: "🎸 Âm nhạc", time: "2 giờ trước", 
-                content: "Chiều nay xách đàn ra công viên hát hò chút không mọi người? Mình đàn, cần tìm bạn nữ hát hay để song ca bài 'Mặt trời của em' 🎵", 
-                img: "https://via.placeholder.com/500x300/ffcc99/333?text=Anh+Dan+Guitar" 
+                src: "images/reel5.mp4", // Link 5: https://vt.tiktok.com/ZSfGX7pEQ/
+                user: "@TechReview", 
+                desc: "Unboxing điện thoại mới nè các bạn ơi 📱 #review #congnghe" 
             },
             { 
-                name: "Lan Anh", avatar: "https://i.pravatar.cc/150?img=1", tag: "🍜 Ăn uống", time: "3 giờ trước", 
-                content: "Trời mưa lạnh thế này tự nhiên thèm lẩu Haidilao quá. Ai đi cùng không, share tiền 50/50 nhaaa 🍲🌧️", 
-                img: "https://via.placeholder.com/500x300/ff9999/ffffff?text=Anh+Noi+Lau" 
+                src: "images/reel6.mp4", // Link 6: https://vt.tiktok.com/ZSfG4NGMK/
+                user: "@MeoMeo", 
+                desc: "Hoàng thượng nhà em đang săn mồi 🐱 #catlover #cute" 
             },
             { 
-                name: "Quốc Huy", avatar: "https://i.pravatar.cc/150?img=12", tag: "✈️ Du lịch", time: "5 giờ trước", 
-                content: "Sắp tới mình định đi phượt Hà Giang mùa hoa Tam Giác Mạch. Cần tìm bạn đồng hành (ôm) vui tính, biết chụp ảnh càng tốt 🌸🏍️", 
-                img: "https://via.placeholder.com/500x300/99ccff/333?text=Anh+Di+Phuot" 
+                src: "images/reel7.mp4", // Link 7: https://vt.tiktok.com/ZSfG4dVNv/
+                user: "@CampingVN", 
+                desc: "Cuối tuần đi cắm trại nướng thịt là hết bài ⛺🔥 #camping #food" 
             },
             { 
-                name: "Tiểu Mèo", avatar: "https://i.pravatar.cc/150?img=4", tag: "🐶 Thú cưng", time: "6 giờ trước", 
-                content: "Chiều nay mình dắt bé Corgi nhà mình đi dạo công viên Yên Sở. Ai yêu chó thì ra chơi chung nhen, bé hiền lắm 🐕", 
-                img: "https://via.placeholder.com/500x300/ffeda0/333?text=Anh+Cho+Corgi" 
+                src: "images/reel8.mp4", // Link 8: https://vt.tiktok.com/ZSfGX3Lvp/
+                user: "@YogaLife", 
+                desc: "Thư giãn buổi sáng, khởi đầu ngày mới 🧘‍♀️ #yoga #morning" 
             },
             { 
-                name: "Phương Ly", avatar: "https://i.pravatar.cc/150?img=2", tag: "📚 Học tập", time: "1 ngày trước", 
-                content: "Tìm bạn học cùng tiếng Anh giao tiếp (IELTS) tại thư viện thành phố vào cuối tuần. Ưu tiên các bạn nghiêm túc ạ! 📖", 
-                img: "https://via.placeholder.com/500x300/eeeeee/333?text=Anh+Sach+Vo" 
+                src: "images/reel9.mp4", // Link 9: https://vt.tiktok.com/ZSfG4MbD9/
+                user: "@TamSu", 
+                desc: "Call video với người yêu xa be like... 💕 #love #couple" 
             },
             { 
-                name: "Tuấn Hưng", avatar: "https://i.pravatar.cc/150?img=60", tag: "💬 Tâm sự", time: "Vừa xong", 
-                content: "Thất tình buồn quá, có ai rảnh call tâm sự xíu không? Voice chat ẩn danh cũng được... 💔", 
-                img: "" // Bài viết này chỉ có chữ, không có ảnh
+                src: "images/reel10.mp4", // Link 10: https://vt.tiktok.com/ZSfGXvPkf/
+                user: "@HappyNewYear", 
+                desc: "Pháo hoa đẹp quá mọi người ơi! 🎆 #fireworks #dep" 
             }
         ];
 
-        // 2. RENDER FEED (Hàm vẽ giao diện bài viết)
+        // --- CÁC HÀM RENDER VÀ XỬ LÝ (KHÔNG ĐỔI) ---
         function renderFeed() {
             const container = document.getElementById('feedSection');
             let html = '';
             dummyPosts.forEach(post => {
-                // Kiểm tra xem bài viết có ảnh không
                 const imgHtml = post.img ? `<div class="post-media"><img src="${post.img}"></div>` : '';
-                
                 html += `
                 <div class="post-card">
                     <div class="post-header">
                         <img src="${post.avatar}" class="post-avatar">
-                        <div class="post-info">
-                            <h4>${post.name}</h4>
-                            <span>${post.time}</span>
-                        </div>
+                        <div class="post-info"><h4>${post.name}</h4><span>${post.time}</span></div>
                         <div class="post-tag">${post.tag}</div>
                     </div>
                     <div class="post-content">${post.content}</div>
                     ${imgHtml}
                     <div class="post-actions">
-                        <div class="action-item" onclick="this.classList.toggle('liked')">
-                            <i class="fas fa-heart"></i> Thích
-                        </div>
-                        <div class="action-item">
-                            <i class="fas fa-comment-alt"></i> Bình luận
-                        </div>
-                        <div class="action-item">
-                            <i class="fas fa-share"></i> Chia sẻ
-                        </div>
+                        <div class="action-item" onclick="this.classList.toggle('liked')"><i class="fas fa-heart"></i> Thích</div>
+                        <div class="action-item"><i class="fas fa-comment-alt"></i> Bình luận</div>
+                        <div class="action-item"><i class="fas fa-share"></i> Chia sẻ</div>
                     </div>
                 </div>`;
             });
             container.innerHTML = html;
         }
 
-        // 3. RENDER REELS (10 VIDEO TIKTOK STYLE)
         function renderReels() {
              const container = document.getElementById('reelsSection');
-             
-             // Danh sách 10 video (Link demo chất lượng cao)
-             const reelsData = [
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4", user: "@MiuMiu", desc: "Phố lên đèn là em lên đồ 💃 #nightvibes #chill" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4", user: "@ThienNhien", desc: "Mùa hoa đẹp nhất năm, ai đi chụp ảnh không? 🌼 #flower #travel" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4", user: "@BienXanh", desc: "Biển Vũng Tàu hôm nay êm quá 🌊 #vitaminsea #travel" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-on-a-running-track-32832-large.mp4", user: "@GymGirl", desc: "Chạy bộ mỗi sáng để có body đẹp 💪 #fitness #gym" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-smart-phone-with-green-screen-at-a-desk-3329-large.mp4", user: "@TechReview", desc: "Unboxing điện thoại mới nè các bạn ơi 📱 #review #congnghe" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-red-cat-on-a-green-lawn-40997-large.mp4", user: "@MeoMeo", desc: "Hoàng thượng nhà em đang săn mồi 🐱 #catlover #cute" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-serving-dinner-on-a-camping-table-outside-41829-large.mp4", user: "@CampingVN", desc: "Cuối tuần đi cắm trại nướng thịt là hết bài ⛺🔥 #camping #food" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-woman-doing-yoga-exercises-in-the-morning-40669-large.mp4", user: "@YogaLife", desc: "Thư giãn buổi sáng, khởi đầu ngày mới 🧘‍♀️ #yoga #morning" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-talking-on-video-call-on-smartphone-at-home-40173-large.mp4", user: "@TamSu", desc: "Call video với người yêu xa be like... 💕 #love #couple" },
-                { src: "https://assets.mixkit.co/videos/preview/mixkit-fireworks-illuminating-the-beach-sky-4161-large.mp4", user: "@HappyNewYear", desc: "Pháo hoa đẹp quá mọi người ơi! 🎆 #fireworks #dep" }
-             ];
-
              let html = '';
-             reelsData.forEach((reel, index) => {
+             reelsData.forEach((reel) => {
                  html += `
                 <div class="reel-video-item">
                     <video class="reel-video-player" src="${reel.src}" loop onclick="toggleReel(this)"></video>
-                    
                     <div class="reel-ui">
                         <h3>${reel.user} <i class="fas fa-check-circle" style="color: #2ed573; font-size: 14px;"></i></h3>
                         <p>${reel.desc}</p>
                     </div>
-                    
                     <div class="reel-side-bar">
                         <div class="reel-icon" onclick="this.style.color='red'"><i class="fas fa-heart"></i><span>${Math.floor(Math.random() * 5000)}</span></div>
                         <div class="reel-icon"><i class="fas fa-comment-dots"></i><span>${Math.floor(Math.random() * 500)}</span></div>
@@ -164,14 +149,12 @@
              container.innerHTML = html;
         }
 
-        // --- CÁC HÀM XỬ LÝ (GIỮ NGUYÊN) ---
         function switchTab(tab) {
             const feed = document.getElementById('feedSection');
             const reels = document.getElementById('reelsSection');
             const btnFeed = document.getElementById('tabFeed');
             const btnReels = document.getElementById('tabReels');
             const fab = document.querySelector('.fab-post');
-            const videos = document.querySelectorAll('video');
 
             if(tab === 'feed') {
                 feed.style.display = 'block';
@@ -179,56 +162,64 @@
                 btnFeed.classList.add('active');
                 btnReels.classList.remove('active');
                 fab.style.display = 'flex';
-                // Dừng tất cả video khi qua tab Feed
-                videos.forEach(v => v.pause());
+                document.querySelectorAll('video').forEach(v => v.pause());
             } else {
                 feed.style.display = 'none';
                 reels.style.display = 'block';
                 btnFeed.classList.remove('active');
                 btnReels.classList.add('active');
                 fab.style.display = 'none';
-                
-                // Nếu chưa render reels thì render
                 if(reels.innerHTML.trim() === "") renderReels();
                 
-                // Phát video đầu tiên
+                // Tự động phát video đầu tiên sau 500ms
                 setTimeout(() => {
                     const firstVid = reels.querySelector('video');
                     if(firstVid) firstVid.play();
-                }, 100);
+                }, 500);
             }
         }
 
-        // Click vào video để Pause/Play
         function toggleReel(video) {
-            if(video.paused) video.play();
-            else video.pause();
+            video.paused ? video.play() : video.pause();
         }
 
-        // Logic đăng bài (Demo)
         function openPostModal() { document.getElementById('postModal').style.display = 'flex'; }
+        
         function submitNewPost() {
             const content = document.getElementById('newPostContent').value;
             if(!content) { alert('Viết gì đó đi bạn ơi!'); return; }
             
-            // Tạo bài viết mới giả lập
+            // Xử lý ảnh/video người dùng chọn
+            const fileInput = document.getElementById('newPostImg');
+            const videoInput = document.getElementById('newPostVid');
+            let mediaUrl = "";
+            let isVideo = false;
+
+            if (fileInput.files && fileInput.files[0]) {
+                mediaUrl = URL.createObjectURL(fileInput.files[0]);
+            } else if (videoInput.files && videoInput.files[0]) {
+                mediaUrl = URL.createObjectURL(videoInput.files[0]);
+                isVideo = true;
+            } else {
+                mediaUrl = "https://via.placeholder.com/500x300/ffedf0/ff6b81?text=Anh+Moi+Dang"; // Ảnh demo nếu không chọn
+            }
+
             const newPost = {
-                name: "Bạn (Mới)", 
+                name: localStorage.getItem('userName') || "Bạn", 
                 avatar: localStorage.getItem('userAvatar') || "https://via.placeholder.com/50",
                 tag: "🌟 Mới",
                 time: "Vừa xong",
                 content: content,
-                img: "https://via.placeholder.com/500x300/ffedf0/ff6b81?text=Anh+Moi+Dang"
+                img: isVideo ? null : mediaUrl // Nếu là video thì xử lý khác, ở đây demo ảnh
             };
-            
-            // Thêm vào đầu mảng và vẽ lại
+
             dummyPosts.unshift(newPost);
             renderFeed();
             document.getElementById('postModal').style.display = 'none';
             document.getElementById('newPostContent').value = '';
         }
 
-        // KHỞI CHẠY LẦN ĐẦU
+        // Chạy lần đầu
         renderFeed();
     </script>
 </body>
