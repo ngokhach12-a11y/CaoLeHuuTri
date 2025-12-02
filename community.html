@@ -103,25 +103,47 @@
             }
         ];
 
-        // --- CÁC HÀM RENDER VÀ XỬ LÝ (KHÔNG ĐỔI) ---
+       // 2. RENDER FEED (Cập nhật để hỗ trợ cả Video và Ảnh)
         function renderFeed() {
             const container = document.getElementById('feedSection');
             let html = '';
             dummyPosts.forEach(post => {
-                const imgHtml = post.img ? `<div class="post-media"><img src="${post.img}"></div>` : '';
+                let mediaHtml = '';
+                
+                if (post.img) {
+                    // Kiểm tra xem đây là Video hay Ảnh
+                    // Nếu có cờ isVideo = true hoặc đường dẫn đuôi .mp4
+                    if (post.isVideo || post.img.endsWith('.mp4')) {
+                        mediaHtml = `<div class="post-media">
+                                        <video src="${post.img}" controls style="width:100%; border-radius:10px;"></video>
+                                     </div>`;
+                    } else {
+                        mediaHtml = `<div class="post-media"><img src="${post.img}"></div>`;
+                    }
+                }
+
                 html += `
                 <div class="post-card">
                     <div class="post-header">
                         <img src="${post.avatar}" class="post-avatar">
-                        <div class="post-info"><h4>${post.name}</h4><span>${post.time}</span></div>
+                        <div class="post-info">
+                            <h4>${post.name}</h4>
+                            <span>${post.time}</span>
+                        </div>
                         <div class="post-tag">${post.tag}</div>
                     </div>
                     <div class="post-content">${post.content}</div>
-                    ${imgHtml}
+                    ${mediaHtml}
                     <div class="post-actions">
-                        <div class="action-item" onclick="this.classList.toggle('liked')"><i class="fas fa-heart"></i> Thích</div>
-                        <div class="action-item"><i class="fas fa-comment-alt"></i> Bình luận</div>
-                        <div class="action-item"><i class="fas fa-share"></i> Chia sẻ</div>
+                        <div class="action-item" onclick="this.classList.toggle('liked')">
+                            <i class="fas fa-heart"></i> Thích
+                        </div>
+                        <div class="action-item">
+                            <i class="fas fa-comment-alt"></i> Bình luận
+                        </div>
+                        <div class="action-item">
+                            <i class="fas fa-share"></i> Chia sẻ
+                        </div>
                     </div>
                 </div>`;
             });
@@ -185,38 +207,49 @@
 
         function openPostModal() { document.getElementById('postModal').style.display = 'flex'; }
         
+    // 3. CHỨC NĂNG ĐĂNG BÀI (Cập nhật logic lấy file)
         function submitNewPost() {
             const content = document.getElementById('newPostContent').value;
-            if(!content) { alert('Viết gì đó đi bạn ơi!'); return; }
+            const imgInput = document.getElementById('newPostImg');
+            const vidInput = document.getElementById('newPostVid');
             
-            // Xử lý ảnh/video người dùng chọn
-            const fileInput = document.getElementById('newPostImg');
-            const videoInput = document.getElementById('newPostVid');
+            // Biến lưu đường dẫn file và loại file
             let mediaUrl = "";
-            let isVideo = false;
+            let isVideoType = false;
 
-            if (fileInput.files && fileInput.files[0]) {
-                mediaUrl = URL.createObjectURL(fileInput.files[0]);
-            } else if (videoInput.files && videoInput.files[0]) {
-                mediaUrl = URL.createObjectURL(videoInput.files[0]);
-                isVideo = true;
-            } else {
-                mediaUrl = "https://via.placeholder.com/500x300/ffedf0/ff6b81?text=Anh+Moi+Dang"; // Ảnh demo nếu không chọn
+            // Kiểm tra xem người dùng chọn Ảnh hay Video
+            if (imgInput.files && imgInput.files[0]) {
+                mediaUrl = URL.createObjectURL(imgInput.files[0]);
+                isVideoType = false;
+            } else if (vidInput.files && vidInput.files[0]) {
+                mediaUrl = URL.createObjectURL(vidInput.files[0]);
+                isVideoType = true;
+            }
+
+            // Bắt buộc phải có Nội dung HOẶC File mới cho đăng
+            if(!content && !mediaUrl) { 
+                alert('Bạn hãy viết gì đó hoặc chọn ảnh/video nhé!'); 
+                return; 
             }
 
             const newPost = {
-                name: localStorage.getItem('userName') || "Bạn", 
-                avatar: localStorage.getItem('userAvatar') || "https://via.placeholder.com/50",
+                name: localStorage.getItem('userName') || "Bạn (Mới)", 
+                avatar: localStorage.getItem('userAvatar') || "https://via.placeholder.com/150",
                 tag: "🌟 Mới",
                 time: "Vừa xong",
                 content: content,
-                img: isVideo ? null : mediaUrl // Nếu là video thì xử lý khác, ở đây demo ảnh
+                img: mediaUrl, // Đường dẫn file vừa chọn
+                isVideo: isVideoType // Đánh dấu đây là video hay ảnh
             };
 
-            dummyPosts.unshift(newPost);
-            renderFeed();
-            document.getElementById('postModal').style.display = 'none';
-            document.getElementById('newPostContent').value = '';
+            dummyPosts.unshift(newPost); // Thêm lên đầu trang
+            renderFeed(); // Vẽ lại giao diện
+            
+            // Reset form và đóng modal
+            document.getElementById('postModal').style.display = 'none'; 
+            document.getElementById('newPostContent').value = ''; 
+            imgInput.value = ""; // Xóa file đã chọn trong input
+            vidInput.value = "";
         }
 
         // Chạy lần đầu
