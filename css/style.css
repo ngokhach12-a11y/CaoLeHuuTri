@@ -375,3 +375,74 @@ body { background-color: var(--primary-bg); overflow: hidden; }
 .btn-primary { width: 100%; padding: 15px; border-radius: 30px; border: none; background: var(--gradient); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
 .radar-ring { width: 300px; height: 300px; border-radius: 50%; border: 6px solid var(--primary); border-top-color: transparent; animation: spin 1s linear infinite; margin: auto; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+/* CSS CHO GIAO DIỆN FACEBOOK */
+body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; }
+
+.create-post-container, .post-card {
+    background: white;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.input-section { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: #ccc; }
+#postInput {
+    flex: 1; border: none; background: #f0f2f5;
+    padding: 10px 15px; border-radius: 20px; outline: none;
+}
+
+.divider { height: 1px; background: #e4e6eb; margin: 10px 0; }
+.quick-actions { display: flex; justify-content: space-around; }
+.quick-actions button { border: none; background: none; font-weight: bold; color: #65676b; cursor: pointer;}
+
+/* CSS CHO MENU TRƯỢT (BOTTOM SHEET) */
+.overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none; z-index: 998;
+}
+
+.bottom-sheet {
+    position: fixed; bottom: -100%; left: 0; width: 100%;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    padding: 10px 0;
+    transition: bottom 0.3s ease-in-out;
+    z-index: 999;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.sheet-drag-handle {
+    width: 40px; height: 5px; background: #ccc;
+    margin: 0 auto 15px auto; border-radius: 5px;
+}
+
+.sheet-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;
+    font-weight: bold; font-size: 18px;
+}
+
+.btn-post {
+    background: #1877f2; color: white; border: none;
+    padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer;
+}
+
+#realInput {
+    width: 100%; height: 80px; border: none; padding: 15px;
+    font-size: 16px; outline: none; box-sizing: border-box; resize: none;
+}
+
+.menu-item {
+    display: flex; align-items: center; gap: 15px;
+    padding: 12px 15px; border-top: 1px solid #f0f0f0; cursor: pointer;
+}
+.menu-item:active { background-color: #f2f2f2; }
+.menu-item .icon { font-size: 24px; width: 30px; text-align: center; }
+
+/* CSS CHO BÀI VIẾT */
+.post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.post-name { font-weight: bold; }
+.post-time { font-size: 12px; color: gray; }
