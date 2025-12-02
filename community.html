@@ -7,105 +7,54 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* --- CSS RIÊNG ĐỂ SỬA LỖI HIỂN THỊ --- */
-        /* Ép buộc màu chữ và nền để không bị trắng tinh */
+        /* --- CSS SỬA LỖI HIỂN THỊ (QUAN TRỌNG) --- */
+        /* Post Card: Nền trắng, chữ đen */
         .post-card {
-            background: #ffffff !important; /* Nền trắng */
+            background: #ffffff !important; 
             border-radius: 20px;
             padding: 15px;
             margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             border: 1px solid #eee;
-            color: #333; /* Chữ màu đen xám */
+            color: #333; 
         }
 
         .post-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
         }
 
         .post-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid #ddd;
-            background-color: #eee; /* Màu nền nếu ảnh lỗi */
+            width: 45px; height: 45px; border-radius: 50%; object-fit: cover;
+            border: 1px solid #ddd; background-color: #eee;
         }
 
-        .post-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .post-info h4 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: bold;
-            color: #000 !important; /* Tên người dùng màu đen tuyền */
-        }
-
-        .post-info span {
-            font-size: 12px;
-            color: #888;
-        }
+        .post-info { display: flex; flex-direction: column; }
+        .post-info h4 { margin: 0; font-size: 16px; font-weight: bold; color: #000 !important; }
+        .post-info span { font-size: 12px; color: #888; }
 
         .post-tag {
-            margin-left: auto;
-            font-size: 11px;
-            padding: 5px 10px;
-            border-radius: 12px;
-            background: #fff0f3;
-            color: #ff6b81;
-            font-weight: bold;
-            white-space: nowrap;
+            margin-left: auto; font-size: 11px; padding: 5px 10px;
+            border-radius: 12px; background: #fff0f3; color: #ff6b81; font-weight: bold; white-space: nowrap;
         }
 
         .post-content {
-            font-size: 15px;
-            color: #333 !important; /* Nội dung màu đen */
-            line-height: 1.5;
-            margin-bottom: 12px;
+            font-size: 15px; color: #333 !important; line-height: 1.5; margin-bottom: 12px;
         }
 
         .post-media {
-            width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 12px;
-            background-color: #f0f0f0; /* Nền xám để biết có chỗ chứa ảnh */
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 12px;
+            background-color: #f0f0f0; min-height: 50px;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .post-media img, .post-media video {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-        }
+        .post-media img, .post-media video { width: 100%; height: auto; display: block; object-fit: cover; }
 
         .post-actions {
-            display: flex;
-            justify-content: space-around;
-            padding-top: 12px;
-            border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; padding-top: 12px; border-top: 1px solid #eee;
         }
+        .action-item { font-size: 14px; color: #666; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .action-item.liked { color: #ff6b81; }
 
-        .action-item {
-            font-size: 14px;
-            color: #666;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* CSS cho Reels */
+        /* Reels UI */
         .reels-container { display: none; height: 100%; background: #000; overflow-y: scroll; scroll-snap-type: y mandatory; }
         .reel-video-item { width: 100%; height: 100%; position: relative; scroll-snap-align: start; background: #000; }
         .reel-video-player { width: 100%; height: 100%; object-fit: contain; }
@@ -114,8 +63,7 @@
         .reel-icon { font-size: 24px; text-shadow: 0 2px 2px rgba(0,0,0,0.5); text-align: center; }
         .reel-icon span { font-size: 12px; display: block; margin-top: 5px; }
         
-        /* Ẩn hiện tab */
-        .feed-container { display: block; padding-bottom: 100px; }
+        .feed-container { display: block; padding-bottom: 100px; background: #fafafa; }
         .fab-post { display: flex; }
     </style>
 </head>
@@ -132,13 +80,8 @@
         </div>
 
         <div class="main-content" style="display: block; padding: 0;">
-            
-            <div class="feed-container" id="feedSection">
-                </div>
-
-            <div class="reels-container" id="reelsSection">
-                </div>
-
+            <div class="feed-container" id="feedSection"></div>
+            <div class="reels-container" id="reelsSection"></div>
         </div>
 
         <div class="fab-post" onclick="openPostModal()">
@@ -175,11 +118,10 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // --- DATA BÀI VIẾT ---
+        // --- DATA BÀI VIẾT (FEED) ---
         const dummyPosts = [
             { name: "Minh Quân", avatar: "https://i.pravatar.cc/150?img=11", tag: "🎮 Game", time: "5 phút trước", content: "Tối nay cuối tuần có ai dual Rank Liên Quân không? Mình đi rừng bao gánh team! 🗡️", img: "https://via.placeholder.com/500x300/e0e0e0/333?text=Anh+Game" },
             { name: "Thu Thảo", avatar: "https://i.pravatar.cc/150?img=5", tag: "☕ Cafe", time: "15 phút trước", content: "Mới tìm được quán Cafe tone trắng xinh xỉu ở Quận 1. Đi chung với mình nè 📸✨", img: "https://via.placeholder.com/500x300/ffeef2/ff6b81?text=Anh+Cafe" },
@@ -212,10 +154,14 @@
             const container = document.getElementById('feedSection');
             let html = '';
             dummyPosts.forEach(post => {
-                // Kiểm tra nếu có ảnh thì hiện, không thì thôi
                 let mediaHtml = '';
                 if(post.img) {
-                    mediaHtml = `<div class="post-media"><img src="${post.img}" alt="Ảnh bài viết"></div>`;
+                    // Xử lý hiển thị cả ảnh và video cho bài đăng
+                    if (post.isVideo || (typeof post.img === 'string' && post.img.endsWith('.mp4'))) {
+                        mediaHtml = `<div class="post-media"><video src="${post.img}" controls></video></div>`;
+                    } else {
+                        mediaHtml = `<div class="post-media"><img src="${post.img}" alt="Ảnh bài viết"></div>`;
+                    }
                 }
 
                 html += `
@@ -231,7 +177,7 @@
                     <div class="post-content">${post.content}</div>
                     ${mediaHtml}
                     <div class="post-actions">
-                        <div class="action-item"><i class="far fa-heart"></i> Thích</div>
+                        <div class="action-item" onclick="this.classList.toggle('liked')"><i class="far fa-heart"></i> Thích</div>
                         <div class="action-item"><i class="far fa-comment-alt"></i> Bình luận</div>
                         <div class="action-item"><i class="fas fa-share"></i> Chia sẻ</div>
                     </div>
@@ -253,8 +199,8 @@
                         <p>${reel.desc}</p>
                     </div>
                     <div class="reel-side-bar">
-                        <div class="reel-icon"><i class="fas fa-heart"></i><span>12k</span></div>
-                        <div class="reel-icon"><i class="fas fa-comment-dots"></i><span>342</span></div>
+                        <div class="reel-icon" onclick="this.style.color='red'"><i class="fas fa-heart"></i><span>${Math.floor(Math.random() * 5000)}</span></div>
+                        <div class="reel-icon"><i class="fas fa-comment-dots"></i><span>${Math.floor(Math.random() * 500)}</span></div>
                         <div class="reel-icon"><i class="fas fa-share"></i><span>Share</span></div>
                     </div>
                 </div>`;
@@ -283,46 +229,47 @@
                 btnFeed.classList.remove('active');
                 btnReels.classList.add('active');
                 fab.style.display = 'none';
-                
-                // Nếu chưa có nội dung thì render
                 if(reels.innerHTML.trim() === "") renderReels();
-                
-                // Phát video đầu tiên
-                setTimeout(() => {
-                    const vid = reels.querySelector('video');
-                    if(vid) vid.play();
-                }, 500);
+                setTimeout(() => { const vid = reels.querySelector('video'); if(vid) vid.play(); }, 500);
             }
         }
 
-        // --- LOGIC ĐĂNG BÀI ---
+        // --- ĐĂNG BÀI (LOGIC MỚI) ---
         function openPostModal() { document.getElementById('postModal').style.display = 'flex'; }
         function submitNewPost() {
             const content = document.getElementById('newPostContent').value;
             const imgInput = document.getElementById('newPostImg');
+            const vidInput = document.getElementById('newPostVid');
             
-            if(!content) { alert('Viết gì đó đi bạn ơi!'); return; }
-
             let mediaUrl = "";
-            if(imgInput.files && imgInput.files[0]) {
+            let isVideoType = false;
+
+            if (imgInput.files && imgInput.files[0]) {
                 mediaUrl = URL.createObjectURL(imgInput.files[0]);
-            } else {
-                mediaUrl = "https://via.placeholder.com/500x300/ffedf0/ff6b81?text=Anh+Tu+Chon";
+                isVideoType = false;
+            } else if (vidInput.files && vidInput.files[0]) {
+                mediaUrl = URL.createObjectURL(vidInput.files[0]);
+                isVideoType = true;
             }
 
+            if(!content && !mediaUrl) { alert('Viết gì đó đi bạn ơi!'); return; }
+
             const newPost = {
-                name: "Bạn (Mới)", 
+                name: localStorage.getItem('userName') || "Bạn (Mới)", 
                 avatar: localStorage.getItem('userAvatar') || "https://via.placeholder.com/150",
                 tag: "🌟 Mới",
                 time: "Vừa xong",
                 content: content,
-                img: mediaUrl
+                img: mediaUrl,
+                isVideo: isVideoType
             };
 
             dummyPosts.unshift(newPost);
             renderFeed();
             document.getElementById('postModal').style.display = 'none';
             document.getElementById('newPostContent').value = '';
+            imgInput.value = "";
+            vidInput.value = "";
         }
 
         // CHẠY LẦN ĐẦU
