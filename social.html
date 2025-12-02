@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CẤU HÌNH CHUNG --- */
+        :root {
+            --primary: #1877f2; /* Xanh Facebook */
+            --bg-color: #f0f2f5;
+            --white: #ffffff;
+            --text-dark: #050505;
+            --text-gray: #65676b;
+            --reel-bg: #000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+        body {
+            background-color: #e9ebee;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        /* KHUNG ĐIỆN THOẠI */
+        .app-container {
+            width: 375px; height: 750px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden;
+            border: 8px solid #333;
+            display: flex; flex-direction: column;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            height: 60px; padding: 0 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--white); border-bottom: 1px solid #ddd; z-index: 50;
+        }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .header-icons i { font-size: 20px; margin-left: 15px; background: #f0f2f5; padding: 8px; border-radius: 50%; color: #000; }
+
+        /* --- CONTENT AREA --- */
+        .content-area {
+            flex: 1; overflow-y: auto;
+            position: relative;
+            background: var(--bg-color);
+            scrollbar-width: none; /* Ẩn thanh cuộn */
+        }
+        .content-area::-webkit-scrollbar { display: none; }
+
+        /* === TAB 1: NEWS FEED (FACEBOOK STYLE) === */
+        #feed-tab { display: block; padding-bottom: 60px; }
+
+        /* Story Bar */
+        .story-container {
+            display: flex; gap: 10px; padding: 15px;
+            background: var(--white); margin-bottom: 10px;
+            overflow-x: auto; white-space: nowrap;
+        }
+        .story-container::-webkit-scrollbar { display: none; }
+        
+        .story-item {
+            position: relative; width: 80px; height: 140px;
+            border-radius: 12px; overflow: hidden; flex-shrink: 0;
+            cursor: pointer;
+        }
+        .story-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .story-item:hover img { transform: scale(1.05); }
+        .story-avatar {
+            position: absolute; top: 10px; left: 10px;
+            width: 30px; height: 30px; border-radius: 50%; border: 3px solid #1877f2;
+            object-fit: cover;
+        }
+        .story-name {
+            position: absolute; bottom: 5px; left: 5px;
+            color: white; font-size: 11px; font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Create Post */
+        .create-post {
+            background: var(--white); padding: 15px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .post-input {
+            flex: 1; background: #f0f2f5; border-radius: 20px;
+            padding: 10px 15px; color: var(--text-gray); font-size: 14px;
+        }
+
+        /* Post Item */
+        .post { background: var(--white); margin-bottom: 10px; padding-bottom: 10px; }
+        .post-header {
+            padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .post-user-info { display: flex; align-items: center; gap: 10px; }
+        .post-user-name { font-weight: 600; font-size: 15px; color: var(--text-dark); }
+        .post-time { font-size: 12px; color: var(--text-gray); display: flex; align-items: center; gap: 5px; }
+        
+        .post-content { padding: 0 15px 10px; font-size: 14px; line-height: 1.4; }
+        .post-image img { width: 100%; height: auto; object-fit: cover; }
+        
+        .post-stats {
+            padding: 10px 15px; display: flex; justify-content: space-between;
+            border-bottom: 1px solid #eee; font-size: 13px; color: var(--text-gray);
+        }
+        .post-actions {
+            display: flex; justify-content: space-around; padding-top: 5px;
+        }
+        .action-btn {
+            flex: 1; text-align: center; padding: 8px;
+            color: var(--text-gray); font-weight: 500; font-size: 14px;
+            cursor: pointer; border-radius: 5px;
+        }
+        .action-btn:active { background: #f2f2f2; }
+        .action-btn.liked { color: #1877f2; }
+
+        /* === TAB 2: REELS (TIKTOK STYLE) === */
+        #reels-tab {
+            display: none; height: 100%;
+            background: #000;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory; /* QUAN TRỌNG: Hiệu ứng cuộn từng video */
+        }
+        
+        .reel-item {
+            width: 100%; height: 100%;
+            position: relative;
+            scroll-snap-align: start; /* Hít vào đầu khung hình */
+            background: #111;
+        }
+        
+        .reel-video {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        
+        /* Reels Overlay UI */
+        .reel-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 40%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 20px 15px 80px; color: white;
+        }
+        
+        .reel-info h3 { margin-bottom: 5px; font-size: 16px; display: flex; align-items: center; gap: 5px; }
+        .reel-info p { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+        .music-tag { font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        
+        .reel-actions {
+            position: absolute; bottom: 90px; right: 10px;
+            display: flex; flex-direction: column; gap: 20px; align-items: center;
+        }
+        .r-action-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 12px;
+        }
+        .r-icon-bg {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; color: white; cursor: pointer; transition: 0.2s;
+        }
+        .r-action-btn.liked .r-icon-bg { color: #ff4757; background: rgba(255, 255, 255, 0.2); }
+        
+        /* Quay đĩa nhạc */
+        .disc-spin {
+            width: 45px; height: 45px; border-radius: 50%; border: 3px solid #333;
+            background: url('https://via.placeholder.com/50') center/cover;
+            animation: spin 3s linear infinite; margin-top: 10px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            height: 60px; background: var(--white); border-top: 1px solid #ddd;
+            display: flex; justify-content: space-around; align-items: center;
+            position: absolute; bottom: 0; width: 100%; z-index: 100;
+        }
+        .nav-item {
+            font-size: 24px; color: var(--text-gray); cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item span { font-size: 10px; margin-top: 2px; }
+
+        /* Điều chỉnh Nav khi ở Reels (Nền đen) */
+        .app-container.dark-mode .bottom-nav { background: #000; border-top: 1px solid #333; }
+        .app-container.dark-mode .nav-item { color: #888; }
+        .app-container.dark-mode .nav-item.active { color: white; }
+        .app-container.dark-mode .header { display: none; } /* Ẩn header khi xem Reels */
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container" id="app">
+        
+        <!-- HEADER (Chỉ hiện ở Feed) -->
+        <div class="header">
+            <div class="logo">facebook</div>
+            <div class="header-icons">
+                <i class="fas fa-search"></i>
+                <i class="fab fa-facebook-messenger"></i>
+            </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+            
+            <!-- TAB 1: FEED -->
+            <div id="feed-tab">
+                
+                <!-- Stories -->
+                <div class="story-container">
+                    <!-- Tạo Story của bạn -->
+                    <div class="story-item">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80" style="filter: brightness(0.7);">
+                        <div style="position: absolute; top: 10px; left: 10px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border:none;">
+                            <i class="fas fa-plus" style="color: #1877f2;"></i>
+                        </div>
+                        <div class="story-name">Tạo tin</div>
+                    </div>
+                    
+                    <!-- Story bạn bè -->
+                    <div class="story-item">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="story-avatar">
+                        <div class="story-name">Lan Ngọc</div>
+                    </div>
+                    <div class="story-item">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100" class="story-avatar">
+                        <div class="story-name">Tuấn Hưng</div>
+                    </div>
+                    <div class="story-item">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100" class="story-avatar">
+                        <div class="story-name">Bảo Thy</div>
+                    </div>
+                </div>
+
+                <!-- Create Post Box -->
+                <div class="create-post">
+                    <img src="https://via.placeholder.com/150" class="user-avatar" id="myAvatar">
+                    <div class="post-input">Bạn đang nghĩ gì?</div>
+                    <i class="fas fa-images" style="color: #45bd62; font-size: 20px;"></i>
+                </div>
+
+                <!-- POST 1 -->
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-user-info">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="user-avatar">
+                            <div>
+                                <div class="post-user-name">Ngọc Trinh</div>
+                                <div class="post-time">2 giờ <i class="fas fa-globe-asia"></i></div>
+                            </div>
+                        </div>
+                        <i class="fas fa-ellipsis-h" style="color: #65676b;"></i>
+                    </div>
+                    <div class="post-content">
+                        Hôm nay trời đẹp quá, đi cafe không mọi người ơi? ☕️☀️
+                    </div>
+                    <div class="post-image">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80">
+                    </div>
+                    <div class="post-stats">
+                        <span><i class="fas fa-thumbs-up" style="color: #1877f2;"></i> 1.2K</span>
+                        <span>45 bình luận • 12 chia sẻ</span>
+                    </div>
+                    <div class="post-actions">
+                        <div class="action-btn" onclick="toggleLike(this)"><i class="far fa-thumbs-up"></i> Thích</div>
+                        <div class="action-btn"><i class="far fa-comment-alt"></i> Bình luận</div>
+                        <div class="action-btn"><i class="fas fa-share"></i> Chia sẻ</div>
+                    </div>
+                </div>
+
+                <!-- POST 2 -->
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-user-info">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="user-avatar">
+                            <div>
+                                <div class="post-user-name">Đức Phúc</div>
+                                <div class="post-time">5 giờ <i class="fas fa-globe-asia"></i></div>
+                            </div>
+                        </div>
+                        <i class="fas fa-ellipsis-h" style="color: #65676b;"></i>
+                    </div>
+                    <div class="post-content">
+                        Cuối tuần rồi, xách balo lên và đi thôi! 🏍️🏔️
+                    </div>
+                    <div class="post-image">
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80">
+                    </div>
+                    <div class="post-stats">
+                        <span><i class="fas fa-thumbs-up" style="color: #1877f2;"></i> 3.5K</span>
+                        <span>120 bình luận • 50 chia sẻ</span>
+                    </div>
+                    <div class="post-actions">
+                        <div class="action-btn" onclick="toggleLike(this)"><i class="far fa-thumbs-up"></i> Thích</div>
+                        <div class="action-btn"><i class="far fa-comment-alt"></i> Bình luận</div>
+                        <div class="action-btn"><i class="fas fa-share"></i> Chia sẻ</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: REELS (TIKTOK) -->
+            <div id="reels-tab">
+                
+                <!-- VIDEO 1 -->
+                <div class="reel-item">
+                    <!-- Video placeholder (loop, muted để tự chạy) -->
+                    <video class="reel-video" src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4" loop muted playsinline onclick="toggleVideo(this)"></video>
+                    
+                    <div class="reel-overlay">
+                        <div class="reel-info">
+                            <h3>@MinhTu <span><i class="fas fa-check-circle" style="color: #20d5ec;"></i></span></h3>
+                            <p>Chill cùng ánh đèn Neon ✨ #chill #night</p>
+                            <div class="music-tag"><i class="fas fa-music"></i> Âm thanh gốc - MinhTu</div>
+                        </div>
+                    </div>
+
+                    <div class="reel-actions">
+                        <div class="r-action-btn" onclick="toggleReelLike(this)">
+                            <div class="r-icon-bg"><i class="fas fa-heart"></i></div>
+                            <span>120K</span>
+                        </div>
+                        <div class="r-action-btn">
+                            <div class="r-icon-bg"><i class="fas fa-comment-dots"></i></div>
+                            <span>3021</span>
+                        </div>
+                        <div class="r-action-btn">
+                            <div class="r-icon-bg"><i class="fas fa-share"></i></div>
+                            <span>Share</span>
+                        </div>
+                        <div class="disc-spin"></div>
+                    </div>
+                </div>
+
+                <!-- VIDEO 2 -->
+                <div class="reel-item">
+                    <video class="reel-video" src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4" loop muted playsinline onclick="toggleVideo(this)"></video>
+                    
+                    <div class="reel-overlay">
+                        <div class="reel-info">
+                            <h3>@ThienNhien <span><i class="fas fa-check-circle" style="color: #20d5ec;"></i></span></h3>
+                            <p>Mùa hoa đẹp nhất năm 🌼 #nature #flowers</p>
+                            <div class="music-tag"><i class="fas fa-music"></i> Nhạc nền thư giãn</div>
+                        </div>
+                    </div>
+
+                    <div class="reel-actions">
+                        <div class="r-action-btn" onclick="toggleReelLike(this)">
+                            <div class="r-icon-bg"><i class="fas fa-heart"></i></div>
+                            <span>89K</span>
+                        </div>
+                        <div class="r-action-btn">
+                            <div class="r-icon-bg"><i class="fas fa-comment-dots"></i></div>
+                            <span>1.2K</span>
+                        </div>
+                        <div class="r-action-btn">
+                            <div class="r-icon-bg"><i class="fas fa-share"></i></div>
+                            <span>Share</span>
+                        </div>
+                        <div class="disc-spin"></div>
+                    </div>
+                </div>
+
+                <!-- VIDEO 3 -->
+                <div class="reel-item">
+                    <video class="reel-video" src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" loop muted playsinline onclick="toggleVideo(this)"></video>
+                    <div class="reel-overlay">
+                        <div class="reel-info">
+                            <h3>@BienCa</h3>
+                            <p>Biển xanh vẫy gọi 🌊 #ocean #travel</p>
+                            <div class="music-tag"><i class="fas fa-music"></i> Ocean Eyes</div>
+                        </div>
+                    </div>
+                    <div class="reel-actions">
+                        <div class="r-action-btn" onclick="toggleReelLike(this)">
+                            <div class="r-icon-bg"><i class="fas fa-heart"></i></div>
+                            <span>200K</span>
+                        </div>
+                         <div class="r-action-btn">
+                            <div class="r-icon-bg"><i class="fas fa-share"></i></div>
+                            <span>Share</span>
+                        </div>
+                         <div class="disc-spin"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('feed')" id="navFeed">
+                <i class="fas fa-home"></i>
+                <span>Trang chủ</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('reels')" id="navReels">
+                <i class="fas fa-play-circle"></i>
+                <span>Reels</span>
+            </div>
+            <div class="nav-item" onclick="alert('Tính năng đang phát triển')">
+                <i class="fas fa-user-circle"></i>
+                <span>Cá nhân</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. CHUYỂN TAB (FEED <-> REELS) ---
+        function switchTab(tab) {
+            const feedTab = document.getElementById('feed-tab');
+            const reelsTab = document.getElementById('reels-tab');
+            const navFeed = document.getElementById('navFeed');
+            const navReels = document.getElementById('navReels');
+            const app = document.getElementById('app');
+            const videos = document.querySelectorAll('video');
+
+            if (tab === 'feed') {
+                // Hiện Feed
+                feedTab.style.display = 'block';
+                reelsTab.style.display = 'none';
+                navFeed.classList.add('active');
+                navReels.classList.remove('active');
+                
+                // Tắt chế độ tối
+                app.classList.remove('dark-mode');
+                
+                // Dừng tất cả video
+                videos.forEach(v => v.pause());
+            } else {
+                // Hiện Reels
+                feedTab.style.display = 'none';
+                reelsTab.style.display = 'block';
+                navFeed.classList.remove('active');
+                navReels.classList.add('active');
+                
+                // Bật chế độ tối (cho Reels đẹp hơn)
+                app.classList.add('dark-mode');
+                
+                // Tự động phát video đầu tiên
+                const firstVideo = reelsTab.querySelector('video');
+                if(firstVideo) firstVideo.play();
+            }
+        }
+
+        // --- 2. INTERACTION (LIKE) ---
+        // Like bài viết Feed
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            const icon = btn.querySelector('i');
+            if(btn.classList.contains('liked')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                btn.style.color = '#1877f2';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                btn.style.color = 'var(--text-gray)';
+            }
+        }
+
+        // Like Video Reels (Tim đỏ)
+        function toggleReelLike(btn) {
+            btn.classList.toggle('liked');
+        }
+
+        // --- 3. VIDEO CONTROL (Bấm để dừng/phát) ---
+        function toggleVideo(video) {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        // --- 4. TỰ ĐỘNG PHÁT KHI CUỘN (REELS) ---
+        // Sử dụng IntersectionObserver để biết video nào đang hiện trên màn hình
+        const reelsTab = document.getElementById('reels-tab');
+        const videos = document.querySelectorAll('.reel-video');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.currentTime = 0; // Phát lại từ đầu
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        }, { threshold: 0.6 }); // Khi hiện 60% màn hình thì tính là đang xem
+
+        videos.forEach(v => observer.observe(v));
+
+        // --- 5. LOAD AVATAR TỪ TRANG TRƯỚC (Nếu có) ---
+        const myAvatar = localStorage.getItem('userAvatar');
+        if(myAvatar) document.getElementById('myAvatar').src = myAvatar;
+
+    </script>
+</body>
+</html>
