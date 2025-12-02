@@ -195,3 +195,93 @@ body {
     border-color: #ccc;
     color: white;
 }
+/* --- CSS CHO TRANG CỘNG ĐỒNG (FEED & REELS) --- */
+
+/* Tab Switcher (Nút chuyển Feed/Reels ở trên cùng) */
+.top-tabs {
+    display: flex; justify-content: center; gap: 20px;
+    padding: 15px 0; background: #fff; border-bottom: 1px solid #f0f0f0;
+}
+.tab-btn {
+    font-size: 16px; font-weight: 700; color: #ccc; cursor: pointer; padding-bottom: 5px;
+}
+.tab-btn.active {
+    color: var(--primary); border-bottom: 3px solid var(--primary);
+}
+
+/* Nút đăng bài nổi (Floating Action Button) */
+.fab-post {
+    position: absolute; bottom: 90px; right: 20px;
+    width: 55px; height: 55px; border-radius: 50%;
+    background: var(--gradient); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+    cursor: pointer; z-index: 100; transition: transform 0.2s;
+}
+.fab-post:active { transform: scale(0.9); }
+
+/* --- STYLE BÀI VIẾT (FEED) --- */
+.feed-container {
+    padding: 15px; padding-bottom: 80px; overflow-y: auto; height: 100%;
+    background: #fafafa;
+}
+
+.post-card {
+    background: white; border-radius: 20px; padding: 15px;
+    margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f0f0f0;
+}
+
+.post-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.post-avatar {
+    width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+    border: 2px solid #ffeef2;
+}
+.post-info h4 { margin: 0; font-size: 15px; color: #333; }
+.post-info span { font-size: 12px; color: #999; }
+.post-tag {
+    margin-left: auto; font-size: 11px; padding: 4px 10px;
+    border-radius: 12px; background: #fff0f3; color: var(--primary); font-weight: bold;
+}
+
+.post-content { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 10px; }
+
+.post-media {
+    width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 10px;
+}
+.post-media img { width: 100%; height: auto; display: block; }
+
+.post-actions {
+    display: flex; justify-content: space-around; padding-top: 10px;
+    border-top: 1px solid #f9f9f9;
+}
+.action-item {
+    font-size: 13px; color: #888; cursor: pointer; display: flex; align-items: center; gap: 5px;
+}
+.action-item.liked { color: #ff6b81; }
+.action-item:hover { color: var(--primary); }
+
+/* --- STYLE REELS --- */
+.reels-container {
+    height: 100%; background: #000; overflow-y: scroll;
+    scroll-snap-type: y mandatory; display: none; /* Ẩn mặc định */
+}
+.reel-video-item {
+    width: 100%; height: 100%; position: relative;
+    scroll-snap-align: start; background: #111;
+}
+.reel-video-player { width: 100%; height: 100%; object-fit: cover; }
+.reel-ui {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    padding: 20px; padding-bottom: 90px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    color: white;
+}
+.reel-side-bar {
+    position: absolute; right: 10px; bottom: 100px;
+    display: flex; flex-direction: column; gap: 20px; align-items: center;
+}
+.reel-icon { font-size: 28px; text-shadow: 0 2px 5px rgba(0,0,0,0.5); cursor: pointer; }
+.reel-icon span { font-size: 12px; display: block; text-align: center; margin-top: 3px; }
