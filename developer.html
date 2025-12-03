@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Liên Hệ Nhà Phát Triển</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* CSS RIÊNG CHO TRANG DEV */
+        .dev-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff6b81 100%);
+            border-radius: 25px;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 15px 35px rgba(255, 107, 129, 0.3);
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hiệu ứng bóng trang trí */
+        .dev-card::before {
+            content: ''; position: absolute; top: -50px; left: -50px;
+            width: 150px; height: 150px; background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .dev-card::after {
+            content: ''; position: absolute; bottom: -30px; right: -30px;
+            width: 100px; height: 100px; background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .dev-avatar-container {
+            position: relative;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .dev-avatar {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255,255,255,0.8);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .dev-name { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
+        .dev-role { font-size: 14px; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+
+        .info-list {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(5px);
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 12px; font-size: 15px;
+        }
+        .info-item:last-child { margin-bottom: 0; }
+        
+        .info-icon {
+            width: 35px; height: 35px;
+            background: white; color: #ff6b81;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+
+        .contact-actions {
+            display: flex; gap: 15px; justify-content: center; margin-top: 25px;
+        }
+
+        .btn-contact {
+            flex: 1; padding: 12px;
+            border-radius: 30px; border: none;
+            font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+        .btn-call { background: white; color: #ff6b81; }
+        .btn-mail { background: rgba(0,0,0,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .btn-contact:active { transform: scale(0.95); }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="page-title">Liên Hệ 👨‍💻</div>
+            <i class="fas fa-info-circle" style="color: #ccc; font-size: 20px;"></i>
+        </div>
+
+        <div class="main-content" style="display: block;">
+            
+            <div class="dev-card">
+                <div class="dev-avatar-container">
+                    <img src="images/avatar.jpg" class="dev-avatar" onerror="this.src='https://via.placeholder.com/150?text=DEV'">
+                </div>
+                
+                <div class="dev-name">Cao Lê Hữu Trí</div>
+                <div class="dev-role">Fullstack Developer</div>
+
+                <div class="info-list">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-birthday-cake"></i></div>
+                        <span>10/02/2005</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-id-card"></i></div>
+                        <span>MSSV: 231A010519</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <span style="font-size: 13px;">caolehuutri1002@gmail.com</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
+                        <span>0346 918 312</span>
+                    </div>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="tel:0346918312" class="btn-contact btn-call">
+                        <i class="fas fa-phone-alt"></i> Gọi Ngay
+                    </a>
+                    <a href="mailto:caolehuutri1002@gmail.com" class="btn-contact btn-mail">
+                        <i class="fas fa-paper-plane"></i> Gửi Mail
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align: center; color: #888; margin-top: 20px; font-size: 13px;">
+                <p>Cảm ơn bạn đã sử dụng ứng dụng HenHo!</p>
+                <p>&copy; 2024 Design by Huu Tri</p>
+            </div>
+
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item"><i class="fas fa-fire"></i></a>
+            <a href="random.html" class="nav-item"><i class="fas fa-bolt"></i></a>
+            <a href="community.html" class="nav-item"><i class="fas fa-globe-asia"></i></a>
+            <a href="chat.html" class="nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i></a>
+        </nav>
+    </div>
+</body>
+</html>
