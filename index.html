@@ -14,7 +14,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* CSS THẺ BÀI (Cập nhật hiển thị thông tin chi tiết) */
+        /* CSS THẺ BÀI */
         .card-stack {
             width: 100%; max-width: 400px; height: 75vh;
             position: relative; margin: 10px auto;
@@ -28,28 +28,16 @@
             transition: transform 0.5s ease, opacity 0.5s ease;
             overflow: hidden; background-color: #eee;
         }
-        /* Lớp phủ đen mờ để chữ hiện rõ hơn */
         .card-gradient {
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.6) 50%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
             padding: 20px; color: white; width: 100%;
         }
-        
-        /* Tên và Tuổi */
-        .card-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px; }
-        .card-name { font-size: 26px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card-name { font-size: 28px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-bottom: 5px;}
         .card-age { font-size: 22px; font-weight: normal; }
-        
-        /* Thông tin phụ (Location, Job, Goal) */
-        .card-info-row { font-size: 13px; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; opacity: 0.9; }
-        .card-bio { font-size: 15px; margin: 10px 0; line-height: 1.4; color: #fff; font-style: italic; }
-        
-        /* Tags sở thích */
-        .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
-        .c-tag { 
-            background: rgba(255,255,255,0.25); padding: 4px 10px; 
-            border-radius: 12px; font-size: 11px; backdrop-filter: blur(4px); 
-            border: 1px solid rgba(255,255,255,0.4); font-weight: 600;
-        }
+        .card-info-row { font-size: 14px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; opacity: 0.95; }
+        .card-bio { font-size: 15px; margin: 10px 0; line-height: 1.4; color: #fff; font-style: italic; opacity: 0.9; }
+        .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .c-tag { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 12px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.3); font-weight: 600;}
 
         /* Animation */
         .swipe-left { transform: translateX(-150%) rotate(-30deg) !important; opacity: 0; }
@@ -62,7 +50,7 @@
     <div class="app-container">
         <div class="header">
             <div class="page-title">Khám Phá 🔥</div>
-            <div style="font-size: 12px; color: #888;">Đang tìm: <span id="filterLabel" style="font-weight:bold; color:var(--primary);">...</span></div>
+            <div style="font-size: 12px; color: #888;">Tìm: <span id="filterLabel" style="font-weight:bold; color:var(--primary);">...</span></div>
         </div>
 
         <div class="main-content">
@@ -86,87 +74,23 @@
     </div>
 
     <script>
-        // 1. DỮ LIỆU 12 NGƯỜI (BẠN TỰ THÊM ẢNH VÀO THƯ MỤC IMAGES NHÉ)
-        /* QUY ƯỚC ĐẶT TÊN ẢNH:
-           - Nữ: user1.jpg -> user6.jpg
-           - Nam: user7.jpg -> user12.jpg
-        */
+        // --- 1. DỮ LIỆU AN TOÀN (Dùng link ảnh online để không bị lỗi trắng) ---
         const allProfiles = [
-            // --- DANH SÁCH NỮ (6 NGƯỜI) ---
-            { 
-                gender: 'female', name: "Cáo Nhỏ 🦊", age: 20, img: "images/user1.jpg", 
-                location: "Q1, TP.HCM", goal: "☕ Cafe & Trò chuyện", job: "Sinh viên RMIT",
-                bio: "Em không thích chụp ảnh, em chỉ thích anh chụp em thôi.", 
-                tags: ["Nghệ thuật", "Mèo", "Trà sữa"] 
-            },
-            { 
-                gender: 'female', name: "Bé Gạo", age: 22, img: "images/user2.jpg", 
-                location: "Cầu Giấy, Hà Nội", goal: "💍 Mối quan hệ nghiêm túc", job: "Marketing",
-                bio: "Nghiêm túc thì inbox, trap boy xin tha em ạ.", 
-                tags: ["Nấu ăn", "Du lịch", "Sách"] 
-            },
-            { 
-                gender: 'female', name: "Mây ☁️", age: 19, img: "images/user3.jpg", 
-                location: "Đà Nẵng", goal: "🎮 Tìm bạn Duo Rank", job: "Freelancer",
-                bio: "Tuyển người yêu biết đánh Liên Quân, em support cho.", 
-                tags: ["Game", "Anime", "Cosplay"] 
-            },
-            { 
-                gender: 'female', name: "Chanh Sả", age: 24, img: "images/user4.jpg", 
-                location: "Q7, TP.HCM", goal: "🥂 FWB (Tùy duyên)", job: "Người mẫu ảnh",
-                bio: "Thích những nơi sang trọng và người đàn ông tinh tế.", 
-                tags: ["Gym", "Shopping", "Bar"] 
-            },
-            { 
-                gender: 'female', name: "Thanh Xuân", age: 21, img: "images/user5.jpg", 
-                location: "Hoàn Kiếm, HN", goal: "📸 Tìm mẫu ảnh", job: "Nhiếp ảnh gia",
-                bio: "Yêu màu hồng, ghét sự giả dối. Thích chụp film.", 
-                tags: ["Vintage", "Film", "Music"] 
-            },
-            { 
-                gender: 'female', name: "Út Cưng", age: 23, img: "images/user6.jpg", 
-                location: "Bình Thạnh, TP.HCM", goal: "👫 Hẹn hò", job: "Kế toán",
-                bio: "Em chỉ cần một người biết lắng nghe và chiều chuộng.", 
-                tags: ["Ăn uống", "Phim Hàn", "Ngủ"] 
-            },
+            // NỮ
+            { gender: 'female', name: "Cáo Nhỏ 🦊", age: 20, img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600", location: "Q1, TP.HCM", goal: "☕ Cafe", job: "Sinh viên", bio: "Thích được chụp ảnh và đi cafe.", tags: ["Mèo", "Trà sữa"] },
+            { gender: 'female', name: "Bé Gạo", age: 22, img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600", location: "Hà Nội", goal: "💍 Nghiêm túc", job: "Marketing", bio: "Nghiêm túc thì inbox ạ.", tags: ["Nấu ăn", "Sách"] },
+            { gender: 'female', name: "Mây ☁️", age: 19, img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600", location: "Đà Nẵng", goal: "🎮 Game", job: "Freelancer", bio: "Tuyển người yêu biết đánh Liên Quân.", tags: ["Game", "Anime"] },
+            { gender: 'female', name: "Chanh Sả", age: 24, img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600", location: "TP.HCM", goal: "🥂 FWB", job: "Model", bio: "Thích những nơi sang trọng.", tags: ["Gym", "Shopping"] },
+            { gender: 'female', name: "Thanh Xuân", age: 21, img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600", location: "Hà Nội", goal: "📸 Mẫu ảnh", job: "Nhiếp ảnh", bio: "Yêu màu hồng, ghét giả dối.", tags: ["Vintage", "Film"] },
+            { gender: 'female', name: "Út Cưng", age: 23, img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600", location: "TP.HCM", goal: "👫 Hẹn hò", job: "Kế toán", bio: "Em chỉ cần một người biết lắng nghe.", tags: ["Ăn uống", "Phim"] },
 
-            // --- DANH SÁCH NAM (6 NGƯỜI) ---
-            { 
-                gender: 'male', name: "Shark Hưng", age: 25, img: "images/user7.jpg", 
-                location: "Q3, TP.HCM", goal: "💍 Tìm vợ tương lai", job: "CEO Startup",
-                bio: "Công việc ổn định, nhà xe đầy đủ, chỉ thiếu em.", 
-                tags: ["Kinh doanh", "Golf", "Xe hơi"] 
-            },
-            { 
-                gender: 'male', name: "Đạt 09", age: 24, img: "images/user8.jpg", 
-                location: "Thanh Xuân, HN", goal: "⚽ Tìm bạn thể thao", job: "PT Gym",
-                bio: "Thích vận động, body 6 múi. Ai muốn giảm cân inbox anh.", 
-                tags: ["Gym", "Bóng đá", "Healthy"] 
-            },
-            { 
-                gender: 'male', name: "Boy Lạnh Lùng", age: 28, img: "images/user9.jpg", 
-                location: "Hải Châu, ĐN", goal: "☕ Cafe làm việc", job: "IT Developer",
-                bio: "Ít nói, làm nhiều. Chỉ cần một người hiểu chuyện.", 
-                tags: ["Code", "Công nghệ", "Camping"] 
-            },
-            { 
-                gender: 'male', name: "Hoàng Prince", age: 22, img: "images/user10.jpg", 
-                location: "Thủ Đức, TP.HCM", goal: "🎸 Tìm bạn hát đôi", job: "Nhạc sĩ",
-                bio: "Biết đàn Guitar và hát. Thích lãng mạn và những bản tình ca.", 
-                tags: ["Âm nhạc", "Acoustic", "Chill"] 
-            },
-            { 
-                gender: 'male', name: "Mr. Vui Vẻ", age: 23, img: "images/user11.jpg", 
-                location: "Tây Hồ, HN", goal: "🍻 Nhậu nhẹt", job: "Sale BĐS",
-                bio: "Sống là phải vui. Thích đi phượt và trải nghiệm.", 
-                tags: ["Phượt", "Nhậu", "Hài hước"] 
-            },
-            { 
-                gender: 'male', name: "Thầy Giáo Mưa", age: 26, img: "images/user12.jpg", 
-                location: "Gò Vấp, TP.HCM", goal: "📚 Tìm bạn đọc sách", job: "Giáo viên",
-                bio: "Thích không gian yên tĩnh, cafe sách và mèo.", 
-                tags: ["Sách", "Mèo", "Lịch sử"] 
-            }
+            // NAM
+            { gender: 'male', name: "Shark Hưng", age: 25, img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600", location: "TP.HCM", goal: "💍 Tìm vợ", job: "CEO", bio: "Công việc ổn định, chỉ thiếu em.", tags: ["Kinh doanh", "Golf"] },
+            { gender: 'male', name: "Đạt 09", age: 24, img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600", location: "Hà Nội", goal: "⚽ Thể thao", job: "PT Gym", bio: "Thích vận động, body 6 múi.", tags: ["Gym", "Bóng đá"] },
+            { gender: 'male', name: "Boy Lạnh Lùng", age: 28, img: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=600", location: "Đà Nẵng", goal: "☕ Cafe", job: "IT Dev", bio: "Ít nói, làm nhiều.", tags: ["Code", "Camping"] },
+            { gender: 'male', name: "Hoàng Prince", age: 22, img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600", location: "TP.HCM", goal: "🎸 Hát đôi", job: "Nhạc sĩ", bio: "Thích lãng mạn và những bản tình ca.", tags: ["Music", "Chill"] },
+            { gender: 'male', name: "Mr. Vui Vẻ", age: 23, img: "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?w=600", location: "Hà Nội", goal: "🍻 Nhậu", job: "Sale", bio: "Sống là phải vui.", tags: ["Phượt", "Nhậu"] },
+            { gender: 'male', name: "Thầy Giáo Mưa", age: 26, img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600", location: "TP.HCM", goal: "📚 Đọc sách", job: "Giáo viên", bio: "Thích không gian yên tĩnh.", tags: ["Sách", "Mèo"] }
         ];
 
         // 2. LỌC DANH SÁCH (Nam/Nữ)
@@ -202,7 +126,8 @@
             const card = document.createElement('div');
             card.className = 'card fade-in';
             card.id = 'currentCard';
-            card.style.backgroundImage = `url('${p.img}')`; // Ảnh từ thư mục images
+            // Dùng ảnh từ data (nếu bạn có ảnh local thì sửa lại link trong data ở trên)
+            card.style.backgroundImage = `url('${p.img}')`; 
 
             // Tạo tags
             let tagsHtml = p.tags.map(tag => `<span class="c-tag">${tag}</span>`).join('');
@@ -245,6 +170,7 @@
             }, 300);
         }
 
+        // CHẠY LẦN ĐẦU
         renderCurrentCard();
     </script>
 </body>
