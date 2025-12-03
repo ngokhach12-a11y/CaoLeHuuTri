@@ -446,3 +446,41 @@ body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; }
 .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .post-name { font-weight: bold; }
 .post-time { font-size: 12px; color: gray; }
+/* --- NÚT LIÊN HỆ DEV NỔI (LUÔN HIỆN) --- */
+.dev-float-btn {
+    position: fixed;
+    top: 80px; /* Cách đỉnh 80px (để không che Header) */
+    right: 15px; /* Cách lề phải 15px */
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border: 2px solid #ff6b81; /* Viền hồng */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(255, 107, 129, 0.3);
+    z-index: 1000; /* Luôn nổi trên cùng */
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s;
+    animation: floatDev 3s ease-in-out infinite;
+}
+
+.dev-float-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    padding: 2px; /* Khoảng cách trắng giữa ảnh và viền */
+}
+
+.dev-float-btn:hover {
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Hiệu ứng nhấp nhô nhẹ để gây chú ý */
+@keyframes floatDev {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
