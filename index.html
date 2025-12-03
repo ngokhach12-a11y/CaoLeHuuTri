@@ -3,45 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>HenHo - Trang Chủ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     
     <script>
-        // Kiểm tra xem người dùng đã đăng ký chưa
         const userName = localStorage.getItem('userName');
-        
-        // Nếu chưa có tên (chưa đăng ký) -> Đá ngay về trang setup.html
         if (!userName) {
             window.location.href = 'setup.html';
         }
     </script>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* CSS riêng cho thẻ bài */
+        .card-stack {
+            width: 100%; max-width: 400px; height: 75vh;
+            position: relative; margin: 10px auto;
+        }
+        .card {
+            width: 100%; height: 100%; border-radius: 20px;
+            background-size: cover; background-position: center;
+            position: absolute; top: 0; left: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            overflow: hidden; background-color: white;
+        }
+        .card-gradient {
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 20px; color: white; width: 100%;
+        }
+        .card-name { font-size: 28px; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card-age { font-size: 22px; font-weight: normal; }
+        .card-bio { font-size: 16px; opacity: 0.9; margin-bottom: 10px; }
+        .card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .c-tag { background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 12px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); }
+        
+        .swipe-left { transform: translateX(-150%) rotate(-30deg) !important; opacity: 0; }
+        .swipe-right { transform: translateX(150%) rotate(30deg) !important; opacity: 0; }
+        .fade-in { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
 </head>
 <body>
     <div class="app-container">
         <div class="header">
             <div class="page-title">Khám Phá 🔥</div>
-            <i class="fas fa-filter" style="font-size: 20px; color: #ccc; cursor: pointer;"></i>
+            <div style="font-size: 12px; color: #888;">Tìm: <span id="filterLabel">Tất cả</span></div>
         </div>
 
         <div class="main-content">
-            <div class="card-stack">
-                <div class="card-placeholder">
-                    <i class="fas fa-user-circle" style="font-size: 80px; color: #ffeaa7; margin-bottom: 20px;"></i>
-                    <p style="color: #aaa;">(Chưa có ảnh)</p>
-                    
-                    <div class="card-info">
-                        <h2>Người lạ ơi <span style="font-size: 20px; font-weight: normal;">22</span></h2>
-                        <p>Đang tìm kiếm một mối quan hệ nghiêm túc...</p>
-                    </div>
-                </div>
+            <div class="card-stack" id="cardContainer">
+                <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: #ccc;">Đang tải dữ liệu...</div>
+            </div>
 
-                <div class="action-buttons">
-                    <button class="btn-circle btn-nope" onclick="swipe('nope')"><i class="fas fa-times"></i></button>
-                    <button class="btn-circle btn-like" onclick="swipe('like')"><i class="fas fa-heart"></i></button>
-                </div>
+            <div class="action-buttons">
+                <button class="btn-circle btn-nope" onclick="handleSwipe('nope')"><i class="fas fa-times"></i></button>
+                <button class="btn-circle btn-like" onclick="handleSwipe('like')"><i class="fas fa-heart"></i></button>
             </div>
         </div>
-<nav class="bottom-nav">
+
+        <nav class="bottom-nav">
             <a href="index.html" class="nav-item active"><i class="fas fa-fire"></i></a>
             <a href="random.html" class="nav-item"><i class="fas fa-bolt"></i></a>
             <a href="community.html" class="nav-item"><i class="fas fa-globe-asia"></i></a>
@@ -49,6 +72,10 @@
             <a href="profile.html" class="nav-item"><i class="fas fa-user"></i></a>
         </nav>
     </div>
-    <script src="js/script.js"></script>
-</body>
-</html>
+
+    <script>
+        // DATA 12 NGƯỜI
+        const allProfiles = [
+            // NỮ
+            { gender: 'female', name: "Thu Thảo", age: 20, img: "https://images.unsplash.com/photo-1532598187460-981002a55927?w=600", bio: "Sinh viên năm 2. Thích trà sữa 🐱", tags: ["Học tập", "Thú cưng"] },
+            { gender: 'female', name: "Bảo Ngọc", age: 22, img: "
