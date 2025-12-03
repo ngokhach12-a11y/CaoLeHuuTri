@@ -8,15 +8,13 @@
     
     <script>
         const userName = localStorage.getItem('userName');
-        if (!userName) {
-            window.location.href = 'setup.html';
-        }
+        if (!userName) { window.location.href = 'setup.html'; }
     </script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* CSS riêng cho thẻ bài */
+        /* CSS THẺ BÀI (Cập nhật hiển thị thông tin chi tiết) */
         .card-stack {
             width: 100%; max-width: 400px; height: 75vh;
             position: relative; margin: 10px auto;
@@ -25,21 +23,35 @@
             width: 100%; height: 100%; border-radius: 20px;
             background-size: cover; background-position: center;
             position: absolute; top: 0; left: 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             display: flex; flex-direction: column; justify-content: flex-end;
             transition: transform 0.5s ease, opacity 0.5s ease;
-            overflow: hidden; background-color: white;
+            overflow: hidden; background-color: #eee;
         }
+        /* Lớp phủ đen mờ để chữ hiện rõ hơn */
         .card-gradient {
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.6) 50%, transparent 100%);
             padding: 20px; color: white; width: 100%;
         }
-        .card-name { font-size: 28px; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .card-age { font-size: 22px; font-weight: normal; }
-        .card-bio { font-size: 16px; opacity: 0.9; margin-bottom: 10px; }
-        .card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-        .c-tag { background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 12px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); }
         
+        /* Tên và Tuổi */
+        .card-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px; }
+        .card-name { font-size: 26px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card-age { font-size: 22px; font-weight: normal; }
+        
+        /* Thông tin phụ (Location, Job, Goal) */
+        .card-info-row { font-size: 13px; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; opacity: 0.9; }
+        .card-bio { font-size: 15px; margin: 10px 0; line-height: 1.4; color: #fff; font-style: italic; }
+        
+        /* Tags sở thích */
+        .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
+        .c-tag { 
+            background: rgba(255,255,255,0.25); padding: 4px 10px; 
+            border-radius: 12px; font-size: 11px; backdrop-filter: blur(4px); 
+            border: 1px solid rgba(255,255,255,0.4); font-weight: 600;
+        }
+
+        /* Animation */
         .swipe-left { transform: translateX(-150%) rotate(-30deg) !important; opacity: 0; }
         .swipe-right { transform: translateX(150%) rotate(30deg) !important; opacity: 0; }
         .fade-in { animation: fadeIn 0.5s; }
@@ -50,12 +62,12 @@
     <div class="app-container">
         <div class="header">
             <div class="page-title">Khám Phá 🔥</div>
-            <div style="font-size: 12px; color: #888;">Tìm: <span id="filterLabel">Tất cả</span></div>
+            <div style="font-size: 12px; color: #888;">Đang tìm: <span id="filterLabel" style="font-weight:bold; color:var(--primary);">...</span></div>
         </div>
 
         <div class="main-content">
             <div class="card-stack" id="cardContainer">
-                <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: #ccc;">Đang tải dữ liệu...</div>
+                <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: #ccc;">Đang tải hồ sơ...</div>
             </div>
 
             <div class="action-buttons">
@@ -74,8 +86,166 @@
     </div>
 
     <script>
-        // DATA 12 NGƯỜI
+        // 1. DỮ LIỆU 12 NGƯỜI (BẠN TỰ THÊM ẢNH VÀO THƯ MỤC IMAGES NHÉ)
+        /* QUY ƯỚC ĐẶT TÊN ẢNH:
+           - Nữ: user1.jpg -> user6.jpg
+           - Nam: user7.jpg -> user12.jpg
+        */
         const allProfiles = [
-            // NỮ
-            { gender: 'female', name: "Thu Thảo", age: 20, img: "https://images.unsplash.com/photo-1532598187460-981002a55927?w=600", bio: "Sinh viên năm 2. Thích trà sữa 🐱", tags: ["Học tập", "Thú cưng"] },
-            { gender: 'female', name: "Bảo Ngọc", age: 22, img: "
+            // --- DANH SÁCH NỮ (6 NGƯỜI) ---
+            { 
+                gender: 'female', name: "Cáo Nhỏ 🦊", age: 20, img: "images/user1.jpg", 
+                location: "Q1, TP.HCM", goal: "☕ Cafe & Trò chuyện", job: "Sinh viên RMIT",
+                bio: "Em không thích chụp ảnh, em chỉ thích anh chụp em thôi.", 
+                tags: ["Nghệ thuật", "Mèo", "Trà sữa"] 
+            },
+            { 
+                gender: 'female', name: "Bé Gạo", age: 22, img: "images/user2.jpg", 
+                location: "Cầu Giấy, Hà Nội", goal: "💍 Mối quan hệ nghiêm túc", job: "Marketing",
+                bio: "Nghiêm túc thì inbox, trap boy xin tha em ạ.", 
+                tags: ["Nấu ăn", "Du lịch", "Sách"] 
+            },
+            { 
+                gender: 'female', name: "Mây ☁️", age: 19, img: "images/user3.jpg", 
+                location: "Đà Nẵng", goal: "🎮 Tìm bạn Duo Rank", job: "Freelancer",
+                bio: "Tuyển người yêu biết đánh Liên Quân, em support cho.", 
+                tags: ["Game", "Anime", "Cosplay"] 
+            },
+            { 
+                gender: 'female', name: "Chanh Sả", age: 24, img: "images/user4.jpg", 
+                location: "Q7, TP.HCM", goal: "🥂 FWB (Tùy duyên)", job: "Người mẫu ảnh",
+                bio: "Thích những nơi sang trọng và người đàn ông tinh tế.", 
+                tags: ["Gym", "Shopping", "Bar"] 
+            },
+            { 
+                gender: 'female', name: "Thanh Xuân", age: 21, img: "images/user5.jpg", 
+                location: "Hoàn Kiếm, HN", goal: "📸 Tìm mẫu ảnh", job: "Nhiếp ảnh gia",
+                bio: "Yêu màu hồng, ghét sự giả dối. Thích chụp film.", 
+                tags: ["Vintage", "Film", "Music"] 
+            },
+            { 
+                gender: 'female', name: "Út Cưng", age: 23, img: "images/user6.jpg", 
+                location: "Bình Thạnh, TP.HCM", goal: "👫 Hẹn hò", job: "Kế toán",
+                bio: "Em chỉ cần một người biết lắng nghe và chiều chuộng.", 
+                tags: ["Ăn uống", "Phim Hàn", "Ngủ"] 
+            },
+
+            // --- DANH SÁCH NAM (6 NGƯỜI) ---
+            { 
+                gender: 'male', name: "Shark Hưng", age: 25, img: "images/user7.jpg", 
+                location: "Q3, TP.HCM", goal: "💍 Tìm vợ tương lai", job: "CEO Startup",
+                bio: "Công việc ổn định, nhà xe đầy đủ, chỉ thiếu em.", 
+                tags: ["Kinh doanh", "Golf", "Xe hơi"] 
+            },
+            { 
+                gender: 'male', name: "Đạt 09", age: 24, img: "images/user8.jpg", 
+                location: "Thanh Xuân, HN", goal: "⚽ Tìm bạn thể thao", job: "PT Gym",
+                bio: "Thích vận động, body 6 múi. Ai muốn giảm cân inbox anh.", 
+                tags: ["Gym", "Bóng đá", "Healthy"] 
+            },
+            { 
+                gender: 'male', name: "Boy Lạnh Lùng", age: 28, img: "images/user9.jpg", 
+                location: "Hải Châu, ĐN", goal: "☕ Cafe làm việc", job: "IT Developer",
+                bio: "Ít nói, làm nhiều. Chỉ cần một người hiểu chuyện.", 
+                tags: ["Code", "Công nghệ", "Camping"] 
+            },
+            { 
+                gender: 'male', name: "Hoàng Prince", age: 22, img: "images/user10.jpg", 
+                location: "Thủ Đức, TP.HCM", goal: "🎸 Tìm bạn hát đôi", job: "Nhạc sĩ",
+                bio: "Biết đàn Guitar và hát. Thích lãng mạn và những bản tình ca.", 
+                tags: ["Âm nhạc", "Acoustic", "Chill"] 
+            },
+            { 
+                gender: 'male', name: "Mr. Vui Vẻ", age: 23, img: "images/user11.jpg", 
+                location: "Tây Hồ, HN", goal: "🍻 Nhậu nhẹt", job: "Sale BĐS",
+                bio: "Sống là phải vui. Thích đi phượt và trải nghiệm.", 
+                tags: ["Phượt", "Nhậu", "Hài hước"] 
+            },
+            { 
+                gender: 'male', name: "Thầy Giáo Mưa", age: 26, img: "images/user12.jpg", 
+                location: "Gò Vấp, TP.HCM", goal: "📚 Tìm bạn đọc sách", job: "Giáo viên",
+                bio: "Thích không gian yên tĩnh, cafe sách và mèo.", 
+                tags: ["Sách", "Mèo", "Lịch sử"] 
+            }
+        ];
+
+        // 2. LỌC DANH SÁCH (Nam/Nữ)
+        const targetGender = localStorage.getItem('targetGender');
+        let filteredProfiles = [];
+
+        if (targetGender && targetGender !== 'all') {
+            filteredProfiles = allProfiles.filter(p => p.gender === targetGender);
+            document.getElementById('filterLabel').innerText = targetGender === 'male' ? "Nam" : "Nữ";
+        } else {
+            filteredProfiles = [...allProfiles];
+            document.getElementById('filterLabel').innerText = "Tất cả";
+        }
+
+        // Xáo trộn ngẫu nhiên
+        filteredProfiles.sort(() => Math.random() - 0.5);
+
+        let currentIndex = 0;
+
+        // 3. RENDER THẺ BÀI
+        function renderCurrentCard() {
+            const container = document.getElementById('cardContainer');
+            container.innerHTML = '';
+
+            if (filteredProfiles.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#888; padding-top:100px;">Không tìm thấy ai phù hợp!</div>`;
+                return;
+            }
+
+            const p = filteredProfiles[currentIndex];
+
+            // Tạo thẻ HTML
+            const card = document.createElement('div');
+            card.className = 'card fade-in';
+            card.id = 'currentCard';
+            card.style.backgroundImage = `url('${p.img}')`; // Ảnh từ thư mục images
+
+            // Tạo tags
+            let tagsHtml = p.tags.map(tag => `<span class="c-tag">${tag}</span>`).join('');
+
+            card.innerHTML = `
+                <div class="card-gradient">
+                    <div class="card-header">
+                        <div class="card-name">${p.name}</div>
+                        <div class="card-age">${p.age}</div>
+                    </div>
+                    
+                    <div class="card-info-row"><i class="fas fa-map-marker-alt" style="color:#ff6b81; width:15px;"></i> ${p.location}</div>
+                    <div class="card-info-row"><i class="fas fa-briefcase" style="color:#2ed573; width:15px;"></i> ${p.job}</div>
+                    <div class="card-info-row"><i class="fas fa-search-heart" style="color:#ffa502; width:15px;"></i> ${p.goal}</div>
+                    
+                    <div class="card-bio">"${p.bio}"</div>
+                    <div class="card-tags">${tagsHtml}</div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        }
+
+        // 4. XỬ LÝ QUẸT (LOOP)
+        function handleSwipe(action) {
+            const card = document.getElementById('currentCard');
+            if(!card) return;
+
+            if (action === 'nope') card.classList.add('swipe-left');
+            else card.classList.add('swipe-right');
+
+            setTimeout(() => {
+                currentIndex++;
+                // VÒNG LẶP: Nếu hết thì quay về 0
+                if (currentIndex >= filteredProfiles.length) {
+                    currentIndex = 0;
+                    filteredProfiles.sort(() => Math.random() - 0.5); // Xáo trộn lại cho đỡ chán
+                }
+                renderCurrentCard();
+            }, 300);
+        }
+
+        renderCurrentCard();
+    </script>
+</body>
+</html>
