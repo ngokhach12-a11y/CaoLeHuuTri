@@ -123,16 +123,16 @@
     <script>
         // --- DATA BÀI VIẾT (FEED) ---
         const dummyPosts = [
-            { name: "Minh Quân", avatar: "https://i.pravatar.cc/150?img=11", tag: "🎮 Game", time: "5 phút trước", content: "Tối nay cuối tuần có ai dual Rank Liên Quân không? Mình đi rừng bao gánh team! 🗡️", img: "images/bai1.jpg" },
-            { name: "Thu Thảo", avatar: "https://i.pravatar.cc/150?img=5", tag: "☕ Cafe", time: "15 phút trước", content: "Mới tìm được quán Cafe tone trắng xinh xỉu ở Quận 1. Đi chung với mình nè 📸✨", img: "images/bai2.jpg" },
-            { name: "Hải Đăng", avatar: "https://i.pravatar.cc/150?img=3", tag: "⚽ Thể thao", time: "30 phút trước", content: "Sân bóng cỏ nhân tạo khu vực Cầu Giấy tối nay 19h thiếu 2 slot. Anh em nào rảnh giao lưu nhé! ⚽", img: "images/bai3.jpg" },
-            { name: "Bảo Ngọc", avatar: "https://i.pravatar.cc/150?img=9", tag: "🎬 Phim ảnh", time: "1 giờ trước", content: "Mình dư 1 vé xem phim 'Mai' suất 20h tối nay. Bạn nam nào rảnh đi xem cùng mình không? 🍿", img: "images/bai4.jpg" },
-            { name: "Thanh Tùng", avatar: "https://i.pravatar.cc/150?img=8", tag: "🎸 Âm nhạc", time: "2 giờ trước", content: "Chiều nay xách đàn ra công viên hát hò chút không? Mình đàn, cần tìm bạn nữ hát hay 🎵", img: "images/bai5.jpg" },
-            { name: "Lan Anh", avatar: "https://i.pravatar.cc/150?img=1", tag: "🍜 Ăn uống", time: "3 giờ trước", content: "Trời mưa lạnh thế này tự nhiên thèm lẩu quá. Ai đi cùng không, share tiền 50/50 nhaaa 🍲", img: "images/bai6.jpg" },
-            { name: "Quốc Huy", avatar: "https://i.pravatar.cc/150?img=12", tag: "✈️ Du lịch", time: "5 giờ trước", content: "Sắp tới mình định đi phượt Hà Giang. Cần tìm bạn đồng hành vui tính 🌸🏍️", img: "images/bai7.jpg" },
-            { name: "Tiểu Mèo", avatar: "https://i.pravatar.cc/150?img=4", tag: "🐶 Thú cưng", time: "6 giờ trước", content: "Chiều nay mình dắt bé Corgi đi dạo công viên. Ai yêu chó thì ra chơi chung nhen 🐕", img: "images/bai8.jpg" },
-            { name: "Phương Ly", avatar: "https://i.pravatar.cc/150?img=2", tag: "📚 Học tập", time: "1 ngày trước", content: "Tìm bạn học cùng tiếng Anh giao tiếp tại thư viện thành phố vào cuối tuần. 📖", img: "images/bai9.jpg" },
-            { name: "Tuấn Hưng", avatar: "https://i.pravatar.cc/150?img=60", tag: "💬 Tâm sự", time: "Vừa xong", content: "Thất tình buồn quá, có ai rảnh call tâm sự xíu không? Voice chat ẩn danh cũng được... 💔", img: "" }
+            { name: "Minh Quân", avatar: "images/user10.jpg", tag: "🎮 Game", time: "5 phút trước", content: "Tối nay cuối tuần có ai dual Rank Liên Quân không? Mình đi rừng bao gánh team! 🗡️", img: "images/bai1.jpg" },
+            { name: "Thu Thảo", avatar: "images/user3.jpg", tag: "☕ Cafe", time: "15 phút trước", content: "Mới tìm được quán Cafe tone trắng xinh xỉu ở Quận 1. Đi chung với mình nè 📸✨", img: "images/bai2.jpg" },
+            { name: "Hải Đăng", avatar: "images/user8.jpg", tag: "⚽ Thể thao", time: "30 phút trước", content: "Sân bóng cỏ nhân tạo khu vực Cầu Giấy tối nay 19h thiếu 2 slot. Anh em nào rảnh giao lưu nhé! ⚽", img: "images/bai3.jpg" },
+            { name: "Bảo Ngọc", avatar: "images/user5.jpg", tag: "🎬 Phim ảnh", time: "1 giờ trước", content: "Mình dư 1 vé xem phim 'Mai' suất 20h tối nay. Bạn nam nào rảnh đi xem cùng mình không? 🍿", img: "images/bai4.jpg" },
+            { name: "Thanh Tùng", avatar: "images/user11.jpg", tag: "🎸 Âm nhạc", time: "2 giờ trước", content: "Chiều nay xách đàn ra công viên hát hò chút không? Mình đàn, cần tìm bạn nữ hát hay 🎵", img: "images/bai5.jpg" },
+            { name: "Lan Anh", avatar: "images/user6.jpg", tag: "🍜 Ăn uống", time: "3 giờ trước", content: "Trời mưa lạnh thế này tự nhiên thèm lẩu quá. Ai đi cùng không, share tiền 50/50 nhaaa 🍲", img: "images/bai6.jpg" },
+            { name: "Quốc Huy", avatar: "images/user9.jpg", tag: "✈️ Du lịch", time: "5 giờ trước", content: "Sắp tới mình định đi phượt Hà Giang. Cần tìm bạn đồng hành vui tính 🌸🏍️", img: "images/bai7.jpg" },
+            { name: "Tiểu Mèo", avatar: "images/user1.jpg", tag: "🐶 Thú cưng", time: "6 giờ trước", content: "Chiều nay mình dắt bé Corgi đi dạo công viên. Ai yêu chó thì ra chơi chung nhen 🐕", img: "images/bai8.jpg" },
+            { name: "Phương Ly", avatar: "images/user2.jpg", tag: "📚 Học tập", time: "1 ngày trước", content: "Tìm bạn học cùng tiếng Anh giao tiếp tại thư viện thành phố vào cuối tuần. 📖", img: "images/bai9.jpg" },
+            { name: "Tuấn Hưng", avatar: "images/user12.jpg", tag: "💬 Tâm sự", time: "Vừa xong", content: "Thất tình buồn quá, có ai rảnh call tâm sự xíu không? Voice chat ẩn danh cũng được... 💔", img: "" }
         ];
 
         // --- DATA REELS ---
